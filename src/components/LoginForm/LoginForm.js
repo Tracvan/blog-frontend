@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './LoginForm.css';
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const LoginForm = () => {
     const navigate = useNavigate();
@@ -77,8 +77,7 @@ const LoginForm = () => {
                     <a href="#" className="block mt-4 text-center text-blue-600 hover:underline">Forgot password?</a>
                 </form>
 
-                <p className="mt-4 text-center text-gray-600">Register to an existing account? <a href="/register"
-                                                                                                  className="text-blue-600 hover:underline">Register
+                <p className="mt-4 text-center text-gray-600">Register to an existing account? <a href="/register" className="text-blue-600 hover:underline">Register
                     here.</a></p>
                 <div className="social-login">
                     <button className="btn-social" onClick={() => alert('Login with Google')}>
@@ -93,7 +92,6 @@ const LoginForm = () => {
 
 
                 {error && <p className="mt-4 text-center text-red-600">{error}</p>}
-                <p className="mt-4 text-center text-gray-600">Register to an existing account? <a href="/register" className="text-blue-600 hover:underline">Register here.</a></p>
 
             </div>
         </div>

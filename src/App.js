@@ -3,9 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Post from './components/post/Post';
 import Master from './pages/Master/Master';
 import RegisterForm from './components/register/RegisterForm';
-import LoginForm from "./components/LoginForm/LoginForm";
 import UserList from './components/UserList/UserList';
-
 import LoginForm from './components/LoginForm/LoginForm';
 
 function App() {
