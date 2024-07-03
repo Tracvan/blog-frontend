@@ -1,6 +1,11 @@
+import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 function GetPasswordForm() {
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState({
         userName: '',
         email: ''
@@ -21,6 +26,7 @@ function GetPasswordForm() {
 
         validateField(name, value);
     };
+    const [message, setMessage] = useState('');
 
     const validateField = (name, value) => {
         let emailError = errors.email;
@@ -49,11 +55,25 @@ function GetPasswordForm() {
     };
 
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
+
+        event.preventDefault();
 
         if (validateForm()) {
-            console.log('Submitted data:', formData);
-            // Thêm xử lý gửi dữ liệu tới server ở đây
+            try {
+                const response = await axios.get('http://localhost:8080/api/users/' + formData.userName, {
+                    username: formData.userName,
+                    email: formData.email,
+                }).then(response => {
+                    if (response.data.email === formData.email) {
+                        axios.get('http://localhost:8080/api/users/changepw/' + formData.userName);
+                        navigate("/login")
+                    }
+
+                })
+            } catch (error) {
+                console.log("error")
+            }
         }
     };
 

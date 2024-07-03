@@ -5,6 +5,8 @@ import Master from './pages/Master/Master';
 import RegisterForm from './components/register/RegisterForm';
 import ChangePassword from './components/changepassword/ChangePasswordForm';
 import GetPasswordForm from './components/getpassword/GetPasswordForm';
+import LoginForm from './components/LoginForm/LoginForm';
+
 function App() {
     return (
         <BrowserRouter>
@@ -14,6 +16,7 @@ function App() {
                 <Route path="/register" element={<RegisterForm />} />
                 <Route path="/changepassword" element={<ChangePassword />} />
                 <Route path="/getpassword" element={<GetPasswordForm />} />
+                <Route path="/login" element={<LoginForm />} />
             </Routes>
         </BrowserRouter>
     );

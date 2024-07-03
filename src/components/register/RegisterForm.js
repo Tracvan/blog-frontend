@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import './RegisterForm.css'; // Import file CSS cho RegisterForm
+import './RegisterForm.css';
+import axios from 'axios';
 
 function RegisterForm() {
     const [formData, setFormData] = useState({
-        name: '',
+        username: '',
         email: '',
         password: '',
         confirmPassword: ''
@@ -14,6 +15,8 @@ function RegisterForm() {
         password: '',
         confirmPassword: ''
     });
+
+    const [message, setMessage] = useState('');
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -60,12 +63,22 @@ function RegisterForm() {
         });
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
         if (validateForm()) {
-            console.log('Submitted data:', formData);
-            // Thêm xử lý gửi dữ liệu tới server ở đây
+            try {
+                const response = await axios.post('http://localhost:8080/api/auth/register', {
+                    username: formData.username,
+                    email: formData.email,
+                    password: formData.password
+                }).then(response => {
+                    console.log(response.data)
+                })
+                setMessage(response.data.message);
+            } catch (error) {
+                setMessage(error.response.data.message || 'Registration failed!');
+            }
         }
     };
 
@@ -80,8 +93,8 @@ function RegisterForm() {
 
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <label htmlFor="userName" className="block text-gray-700 font-semibold mb-2">User Name</label>
-                        <input type="text" id="userName" name="userName" value={formData.userName} onChange={handleChange} required placeholder="Nguyen Van A" className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" />
+                        <label htmlFor="username" className="block text-gray-700 font-semibold mb-2">User Name</label>
+                        <input type="text" id="username" name="username" value={formData.username} onChange={handleChange} required placeholder="Nguyen Van A" className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" />
                     </div>
                     <div className="mb-4">
                         <label htmlFor="email" className="block text-gray-700 font-semibold mb-2">Your email</label>
@@ -106,6 +119,7 @@ function RegisterForm() {
                     </div>
                     <button type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Create account</button>
                 </form>
+                {message && <p className="mt-4 text-center text-gray-600">{message}</p>}
                 <p className="mt-4 text-center text-gray-600">Already have an account? <a href="/login" className="text-blue-600 hover:underline">Login here.</a></p>
             </div>
         </div>
