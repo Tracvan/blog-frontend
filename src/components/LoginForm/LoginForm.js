@@ -7,7 +7,7 @@ const LoginForm = () => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
-        email: '',
+        username: '',
         password: ''
     });
 
@@ -26,7 +26,7 @@ const LoginForm = () => {
         console.log(formData)
         try {
             const response = await axios.post('http://localhost:8080/api/auth/login', {
-                "email": formData.email,
+                "username": formData.username,
                 "password": formData.password
             });
             console.log('Login successful', response.data);
@@ -43,13 +43,13 @@ const LoginForm = () => {
                 <h2 className="text-center text-gray-900">Log in</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group mb-4">
-                        <label htmlFor="email" className="block text-gray-700">Email</label>
+                        <label htmlFor="username" className="block text-gray-700">Username</label>
                         <input
-                            type="email"
-                            id="email"
-                            name="email"
+                            type="text"
+                            id="username"
+                            name="username"
                             className="w-full px-3 py-2 border rounded-md bg-gray-50 focus:outline-none focus:ring focus:border-blue-300"
-                            value={formData.email}
+                            value={formData.username}
                             onChange={handleChange}
                             required
                         />
