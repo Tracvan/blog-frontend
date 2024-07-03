@@ -17,16 +17,35 @@ body {
     height: 100vh;
 }
 
-.login-form {
-    max-width: 500px;
+.user-list-container {
+    max-width: 800px;
     padding: 40px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     background-color: #fff;
+    margin: 20px;
 }
 
 .text-center {
     text-align: center;
+    margin-bottom: 20px;
+    color: #1a202c;
+}
+
+.user-list-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.user-list-table th, .user-list-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.user-list-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
 }
 
 .text-gray-900 {
@@ -220,21 +239,4 @@ body {
 
 .checkbox-group input {
     margin-right: 0.5rem;
-}
-
-.social-login {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
-.btn-social {
-    background: none;
-    border: none;
-    margin: 0 10px;
-    cursor: pointer;
-}
-
-.btn-social img {
-    width: 30px;
-    height: 30px;
 }
