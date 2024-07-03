@@ -4,7 +4,6 @@ import Post from './components/post/Post';
 import Master from './pages/Master/Master';
 import RegisterForm from './components/register/RegisterForm';
 import LoginForm from './components/LoginForm/LoginForm';
-
 function App() {
     return (
         <BrowserRouter>
