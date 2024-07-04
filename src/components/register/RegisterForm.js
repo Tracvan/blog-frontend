@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import './RegisterForm.css';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+
+import { useNavigate } from "react-router-dom";
 
 function RegisterForm() {
     const navigate = useNavigate();
@@ -75,9 +76,12 @@ function RegisterForm() {
                     username: formData.username,
                     email: formData.email,
                     password: formData.password
-                });
+                }).then(response => {
+                    console.log(response.data)
+                })
                 setMessage(response.data.message);
-
+                setMessage(response.message);
+                // Chuyển hướng đến trang đăng nhập sau khi đăng ký thành công
                 navigate('/login');
             } catch (error) {
                 setMessage(error.response?.data?.message || 'Registration failed!');

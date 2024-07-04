@@ -1,11 +1,15 @@
-// src/App.jsx
+
 import React, {useEffect, useState} from 'react';
 import {Route, Routes, useLocation} from 'react-router-dom';
 import UserList from './components/user/userlist/UserList';
-import Loader from "./common/Loader";
 import DefaultLayout from "./layout/DefaultLayout";
 import "./css/style.css"
 import LoginForm from "./components/LoginForm/LoginForm";
+import Post from './components/post/Post';
+import RegisterForm from './components/register/RegisterForm';
+import ChangePassword from './components/changepassword/ChangePasswordForm';
+import GetPasswordForm from './components/getpassword/GetPasswordForm';
+
 function App() {
     const [loading, setLoading] = useState(true);
     const { pathname } = useLocation();
@@ -22,8 +26,13 @@ function App() {
     return (
         <Routes>
             <Route path={"/login"} element={<LoginForm/>}/>
+            <Route path="/register" element={<RegisterForm />} />
             <Route path={"/admin"} element={<DefaultLayout/>}>
                 <Route path="users" element={<UserList />} />
+                <Route path="posts" element={<Post />} />
+
+                <Route path="changepassword" element={<ChangePassword />} />
+                <Route path="getpassword" element={<GetPasswordForm />} />
             </Route>
         </Routes>
     )
