@@ -1,12 +1,15 @@
-import Header from "../../components/header/Header"
-import Footer from "../../components/footer/Footer"
-import { Outlet } from "react-router-dom"
-function Master() {
+import React from 'react';
+import Header from "../../components/header/Header";
+import Footer from "../../components/footer/Footer";
+import { Outlet } from "react-router-dom";
+import UserList from "../../components/userlist/UserList";
+
+const Master = () => {
     return (
         <>
             <div>
                 <Header />
-                <div className="container">
+                <div className="container mx-auto px-4 mt-4">
                     <div className="row">
                         <div className="col">
                             <Outlet />
@@ -17,6 +20,7 @@ function Master() {
             </div>
 
         </>
-    )
-}
-export default Master
+    );
+};
+
+export default Master;
