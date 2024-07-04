@@ -1,14 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
-body {
-    font-family: 'Inter', sans-serif;
-    background-color: #f9fafb;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
 
 .container {
     display: flex;
@@ -220,4 +211,21 @@ body {
 
 .checkbox-group input {
     margin-right: 0.5rem;
+}
+
+.social-login {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+.btn-social {
+    background: none;
+    border: none;
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+.btn-social img {
+    width: 30px;
+    height: 30px;
 }
