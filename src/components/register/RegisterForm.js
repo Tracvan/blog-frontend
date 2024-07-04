@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './RegisterForm.css';
 import axios from 'axios';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function RegisterForm() {
     const navigation = useNavigate();
@@ -71,11 +71,14 @@ function RegisterForm() {
 
         if (validateForm()) {
             try {
-                const response = await axios.post('http://localhost:8080/api/auth/register', {
+                const response = await axios.post('http://localhost:8080/api/register', {
                     username: formData.username,
                     email: formData.email,
                     password: formData.password
-                });
+                }).then(response => {
+                    console.log(response.data)
+                })
+                setMessage(response.data.message);
                 setMessage(response.message);
                 // Chuyển hướng đến trang đăng nhập sau khi đăng ký thành công
                 navigation('/login');
