@@ -1,4 +1,5 @@
 import React from 'react';
+import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Post from './components/post/Post';
 import Master from './pages/Master/Master';
@@ -13,11 +14,8 @@ function App() {
                 <Route path="/" element={<Master />} />
                 <Route path="/posts" element={<Post />} />
                 <Route path="/register" element={<RegisterForm />} />
-
                 <Route path="/login" element={<LoginForm/>}/>
                 <Route path="/user-list" element={<UserList />} />
-
-                <Route path="/login" element={<LoginForm />} />
 
             </Routes>
         </BrowserRouter>

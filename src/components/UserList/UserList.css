@@ -33,11 +33,9 @@ body {
 }
 
 .user-list-table {
-    max-height: 330px; /* Chiều cao tối đa của table */
-    /*max-width: 1150px; !* Chiều cao tối đa của table *!*/
+    max-height: 330px;
     overflow-y: auto; /* Thêm thanh cuộn dọc */
     overflow-x: auto;
-    /*white-space: nowrap;*/
 }
 
 .user-list-table th, .user-list-table td {
@@ -56,7 +54,7 @@ body {
 }
 
 .text-gray-700 {
-    color:#f9fafb;
+    color: #4a5568;
 }
 
 .text-gray-600 {
@@ -147,10 +145,6 @@ body {
 
 .focus\:ring-blue-300:focus {
     box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
-}
-
-.focus\:outline-none:focus {
-    outline: 0;
 }
 
 .font-medium {
@@ -244,7 +238,6 @@ body {
     margin-right: 0.5rem;
 }
 
-
 .search-container {
     margin-bottom: 20px;
 }
@@ -265,7 +258,6 @@ body {
     box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
 }
 
-/*///////////////////////*/
 .pagination {
     display: flex;
     justify-content: center;
