@@ -85,7 +85,7 @@ const Header = (props) => {
                                 </svg>
                             </button>
 
-                            <input
+                            <input style={{border : 0}}
                                 type="text"
                                 placeholder="Type to search..."
                                 className="w-full bg-transparent pl-9 pr-4 text-black focus:outline-none dark:text-white xl:w-125"
@@ -112,3 +112,6 @@ const Header = (props) => {
 };
 
 export default Header;
+
+
+

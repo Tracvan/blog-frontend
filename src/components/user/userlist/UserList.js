@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import 'tailwindcss/tailwind.css'; // Import Tailwind CSS
 
 const UserList = () => {
     const [users, setUsers] = useState([]);
@@ -25,75 +26,73 @@ const UserList = () => {
     };
 
     return (
-        <div>
-            <h1>User List</h1>
-            {/*<table className="table-auto">*/}
-            {/*    <thead>*/}
-            {/*    <tr>*/}
-            {/*        <th>Username</th>*/}
-            {/*        <th>Created At</th>*/}
-            {/*        <th>Avatar</th>*/}
-            {/*        <th>Full Name</th>*/}
-            {/*        <th>Status</th>*/}
-            {/*        <th>Actions</th>*/}
-            {/*    </tr>*/}
-            {/*    </thead>*/}
-            {/*    <tbody>*/}
-            {/*    {users.map(user => (*/}
-            {/*        <tr key={user.id}>*/}
-            {/*            <td>{user.username}</td>*/}
-            {/*            <td>{formatDate(user.date)}</td>*/}
-            {/*            <td><img src={user.avatar} alt="avatar" style={{ width: '50px', height: '50px' }} /></td>*/}
-            {/*            <td>{user.fullName}</td>*/}
-            {/*            <td>{user.status}</td>*/}
-            {/*            <td>*/}
-            {/*                <button onClick={() => navigate(`/user/${user.id}`)} className="btn btn-info">View</button>*/}
-            {/*            </td>*/}
-            {/*        </tr>*/}
-            {/*    ))}*/}
-            {/*    </tbody>*/}
-            {/*</table>*/}
-
-
-            <div className="relative overflow-x-auto">
-                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" className="px-6 py-3">
-                            Product name
-                        </th>
-                        <th scope="col" className="px-6 py-3">
-                            Color
-                        </th>
-                        <th scope="col" className="px-6 py-3">
-                            Category
-                        </th>
-                        <th scope="col" className="px-6 py-3">
-                            Price
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            Apple MacBook Pro 17"
-                        </th>
-                        <td className="px-6 py-4">
-                            Silver
-                        </td>
-                        <td className="px-6 py-4">
-                            Laptop
-                        </td>
-                        <td className="px-6 py-4">
-                            $2999
-                        </td>
-                    </tr>
-
-                    </tbody>
-                </table>
+        <div className="w-full px-4 sm:px-8">
+            <div className="py-8">
+                <div className="flex flex-row mb-1 sm:mb-0 justify-between w-full">
+                    <h1 className="text-2xl font-semibold leading-tight text-gray-100 uppercase tracking-wider">
+                        User List
+                    </h1>
+                </div>
+                <div className="overflow-x-auto">
+                    <div className="w-full shadow rounded-lg overflow-hidden bg-transparent">
+                        <table className="w-full leading-normal bg-transparent">
+                            <thead>
+                            <tr>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider bg-transparent">
+                                    Username
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider bg-transparent">
+                                    Created At
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider bg-transparent">
+                                    Avatar
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider bg-transparent">
+                                    Full Name
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider bg-transparent">
+                                    Status
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider bg-transparent">
+                                    Actions
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {users.map((user) => (
+                                <tr key={user.id} className="bg-transparent">
+                                    <td className="px-5 py-5 border-b border-gray-200 bg-transparent text-sm">
+                                        <p className="text-gray-100 whitespace-no-wrap">{user.username}</p>
+                                    </td>
+                                    <td className="px-5 py-5 border-b border-gray-200 bg-transparent text-sm">
+                                        <p className="text-gray-100 whitespace-no-wrap">{formatDate(user.date)}</p>
+                                    </td>
+                                    <td className="px-5 py-5 border-b border-gray-200 bg-transparent text-sm">
+                                        <img src={user.avatar} alt="avatar" className="w-10 h-10 rounded-full" />
+                                    </td>
+                                    <td className="px-5 py-5 border-b border-gray-200 bg-transparent text-sm">
+                                        <p className="text-gray-100 whitespace-no-wrap">{user.fullName}</p>
+                                    </td>
+                                    <td className="px-5 py-5 border-b border-gray-200 bg-transparent text-sm">
+                                        <p className={`text-gray-100 whitespace-no-wrap ${user.status === 'locked' ? 'text-red-600' : 'text-green-600'}`}>
+                                            {user.status}
+                                        </p>
+                                    </td>
+                                    <td className="px-5 py-5 border-b border-gray-200 bg-transparent text-sm">
+                                        <button
+                                            onClick={() => navigate(`/admin/user/${user.id}`)}
+                                            className="text-indigo-400 hover:text-indigo-600"
+                                        >
+                                            View
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-
         </div>
     );
 };

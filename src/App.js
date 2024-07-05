@@ -1,4 +1,3 @@
-
 import React, {useEffect, useState} from 'react';
 import {Route, Routes, useLocation} from 'react-router-dom';
 import UserList from './components/user/userlist/UserList';
@@ -9,6 +8,7 @@ import Post from './components/post/Post';
 import RegisterForm from './components/register/RegisterForm';
 import ChangePassword from './components/changepassword/ChangePasswordForm';
 import GetPasswordForm from './components/getpassword/GetPasswordForm';
+import UserDetail from './components/user/userdetail/UserDetail';
 
 function App() {
     const [loading, setLoading] = useState(true);
@@ -22,7 +22,6 @@ function App() {
         setTimeout(() => setLoading(false), 1000);
     }, []);
 
-
     return (
         <Routes>
             <Route path={"/login"} element={<LoginForm/>}/>
@@ -30,9 +29,9 @@ function App() {
             <Route path={"/admin"} element={<DefaultLayout/>}>
                 <Route path="users" element={<UserList />} />
                 <Route path="posts" element={<Post />} />
-
                 <Route path="changepassword" element={<ChangePassword />} />
                 <Route path="getpassword" element={<GetPasswordForm />} />
+                <Route path="user/:id" element={<UserDetail />} />
             </Route>
         </Routes>
     )
