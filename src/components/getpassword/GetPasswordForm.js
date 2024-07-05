@@ -39,7 +39,7 @@ function GetPasswordForm() {
                     : 'Email is invalid';
                 break;
             case 'userName':
-                userNameError = value.length >= 6 && value.length <= 8
+                userNameError = value.length >= 6 && value.length <= 50
                     ? ''
                     : 'Username should be between 6 and 8 characters';
                 break;

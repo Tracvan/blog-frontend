@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import './LoginForm.css';
 import axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
-
+import GetPasswordForm from "../getpassword/GetPasswordForm";
 const LoginForm = () => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
-        username: '',
+        usernameOrEmail: '',
         password: ''
     });
 
@@ -26,13 +26,14 @@ const LoginForm = () => {
         console.log(formData)
         try {
             const response = await axios.post('http://localhost:8080/api/auth/login', {
-                "username": formData.username,
+                "usernameOrEmail": formData.usernameOrEmail,
                 "password": formData.password
             });
             console.log('Login successful', response.data);
             localStorage.setItem('token', response.data.token);
             navigate('/users');
         } catch (error) {
+            console.log(error.response);
             setError('Login failed. Please check your credentials.');
         }
     };
@@ -49,7 +50,7 @@ const LoginForm = () => {
                             id="username"
                             name="username"
                             className="w-full px-3 py-2 border rounded-md bg-gray-50 focus:outline-none focus:ring focus:border-blue-300"
-                            value={formData.username}
+                            value={formData.usernameOrEmail}
                             onChange={handleChange}
                             required
                         />
@@ -74,7 +75,9 @@ const LoginForm = () => {
                             className="w-full px-5 py-2.5 text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-3 focus:ring-blue-300 font-medium">Log
                         in
                     </button>
-                    <a href="#" className="block mt-4 text-center text-blue-600 hover:underline">Forgot password?</a>
+
+                    <a href="http://localhost:3000/getpassword" className="block mt-4 text-center text-blue-600 hover:underline">Forgot password?</a>
+
                 </form>
 
                 <p className="mt-4 text-center text-gray-600">Register to an existing account? <a href="/register" className="text-blue-600 hover:underline">Register

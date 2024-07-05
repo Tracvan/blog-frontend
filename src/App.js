@@ -30,10 +30,9 @@ function App() {
             <Route path={"/admin"} element={<DefaultLayout/>}>
                 <Route path="users" element={<UserList />} />
                 <Route path="posts" element={<Post />} />
-
-                <Route path="changepassword" element={<ChangePassword />} />
-                <Route path="getpassword" element={<GetPasswordForm />} />
             </Route>
+            <Route path={"/changepassword"} element={<ChangePassword />} />
+            <Route path={"/getpassword"} element={<GetPasswordForm />} />
         </Routes>
     )
 }
