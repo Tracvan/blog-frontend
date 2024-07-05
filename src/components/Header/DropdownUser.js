@@ -1,10 +1,22 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import ClickOutside from '../ClickOutside';
 import UserOne from '../../images/user/user-01.png';
+import axios from "axios";
 
 const DropdownUser = () => {
+    const navigate = useNavigate()
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const logout = async () => {
+        try {
+            await axios.get('http://localhost:8080/api/auth/logout');
+            localStorage.removeItem('token');
+            navigate("/login");
+        } catch (error) {
+            console.error('Logout failed', error);
+            // Xử lý lỗi nếu cần
+        }
+    }
 
     return (
         <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
@@ -119,7 +131,7 @@ const DropdownUser = () => {
                             </Link>
                         </li>
                     </ul>
-                    <button className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+                    <button onClick={logout} className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
                         <svg
                             className="fill-current"
                             width="22"

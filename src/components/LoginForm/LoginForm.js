@@ -31,7 +31,7 @@ const LoginForm = () => {
             });
             console.log('Login successful', response.data);
             localStorage.setItem('token', response.data.token);
-            navigate('/users');
+            navigate('/admin');
         } catch (error) {
             console.log(error.response);
             setError('Login failed. Please check your credentials.');
@@ -46,9 +46,10 @@ const LoginForm = () => {
                     <div className="form-group mb-4">
                         <label htmlFor="username" className="block text-gray-700">Username</label>
                         <input
+                            placeholder="username or email"
                             type="text"
                             id="username"
-                            name="username"
+                            name="usernameOrEmail"
                             className="w-full px-3 py-2 border rounded-md bg-gray-50 focus:outline-none focus:ring focus:border-blue-300"
                             value={formData.usernameOrEmail}
                             onChange={handleChange}
@@ -58,6 +59,7 @@ const LoginForm = () => {
                     <div className="form-group mb-4">
                         <label htmlFor="password" className="block text-gray-700">Password</label>
                         <input
+                            placeholder= "******"
                             type="password"
                             id="password"
                             name="password"
