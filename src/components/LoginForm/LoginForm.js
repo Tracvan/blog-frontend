@@ -30,6 +30,7 @@ const LoginForm = () => {
                 "password": formData.password
             });
             console.log('Login successful', response.data);
+            localStorage.setItem('token', response.data.token);
             navigate('/users');
         } catch (error) {
             setError('Login failed. Please check your credentials.');
@@ -66,11 +67,14 @@ const LoginForm = () => {
                         />
                     </div>
                     <div className="form-group mb-4 checkbox-group">
-                        <input type="checkbox" id="rememberMe" name="rememberMe" />
+                        <input type="checkbox" id="rememberMe" name="rememberMe"/>
                         <label htmlFor="rememberMe" className="text-gray-700">Remember password</label>
                     </div>
-                    <button type="submit" className="w-full px-5 py-2.5 text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-3 focus:ring-blue-300 font-medium">Log in</button>
-                    <a href="http://localhost:3000/getpassword" className="block mt-4 text-center text-blue-600 hover:underline">Forgot password?</a>
+                    <button type="submit"
+                            className="w-full px-5 py-2.5 text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-3 focus:ring-blue-300 font-medium">Log
+                        in
+                    </button>
+                    <a href="#" className="block mt-4 text-center text-blue-600 hover:underline">Forgot password?</a>
                 </form>
 
                 <p className="mt-4 text-center text-gray-600">Register to an existing account? <a href="/register" className="text-blue-600 hover:underline">Register
