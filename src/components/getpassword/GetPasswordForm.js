@@ -67,7 +67,7 @@ function GetPasswordForm() {
                 if (response.data.email === formData.email) {
                     setFormData({ userName: '', email: '' });
                     setMessage({ text: "We have sent a temporary password to your email. Please check your inbox", type: 'success' });
-                    await axios.get('http://localhost:8080/api/users/changepw/' + formData.userName);
+                    await axios.get('http://localhost:8080/api/users/getpassword/' + formData.userName);
                     setTimeout(() => {
                         navigate("/login");
                     }, 2000);
