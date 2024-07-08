@@ -76,6 +76,21 @@ const LoginForm = () => {
                     </button>
                     <a href="#" className="block mt-4 text-center text-blue-600 hover:underline">Forgot password?</a>
                 </form>
+
+                <p className="mt-4 text-center text-gray-600">Register to an existing account? <a href="/register" className="text-blue-600 hover:underline">Register
+                    here.</a></p>
+                <div className="social-login">
+                    <button className="btn-social" onClick={() => alert('Login with Google')}>
+                        <img src="https://getnet.mx/media/popup/CHROME.png" alt="Google logo" />
+                    </button>
+                    <button className="btn-social" onClick={() => alert('Login with Facebook')}>
+                        <img src="https://image.makewebeasy.net/makeweb/m_750x0/5Re2KiBcb/CUSTOMER/facebook.png?v=202012190947" alt="Facebook logo" />
+                    </button><button className="btn-social" onClick={() => alert('Login with Facebook')}>
+                        <img src="https://www.pngitem.com/pimgs/m/488-4889569_tiktok-tik-tok-logo-png-transparent-png.png" alt="Facebook logo" />
+                    </button>
+                </div>
+
+
                 {error && <p className="mt-4 text-center text-red-600">{error}</p>}
                 <p className="mt-4 text-center text-gray-600">Register to an existing account? <a href="/register"
                                                                                                   className="text-blue-600 hover:underline">Register
