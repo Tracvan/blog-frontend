@@ -1,23 +1,14 @@
 // src/components/UserDetail/UserDetail.jsx
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import {getDownloadURL, listAll, ref, uploadBytes} from "firebase/storage";
 import {storage} from "../../../firebase";
 import {v4} from "uuid";
 
 
 const UserDetail = () => {
-    const [img, setImg] = useState(null);
-    const [imgList, setImgList] = useState([])
-    const imgRef = ref(storage, "images/");
-    const uploadImage = () => {
-        if (img == null) return;
-        const imgRef = ref(storage, 'images/' + img.name + v4());
-        uploadBytes(imgRef, img).then(() => {
-            alert('Image uploaded')
-        })
-    };
+
     useEffect(() => {
         listAll(imgRef).then((response) => {
             response.items.forEach((item) => {
@@ -28,7 +19,7 @@ const UserDetail = () => {
         })
     });
 
-    const { id } = useParams();
+    const {id} = useParams();
     const [user, setUser] = useState(null);
 
     useEffect(() => {
@@ -59,7 +50,8 @@ const UserDetail = () => {
                 <strong>Created At:</strong> {user.createdAt}
             </div>
             <div>
-                <strong>Avatar:</strong> <img src={user.avatar} alt="avatar" style={{ width: '100px', height: '100px' }} />
+                <strong>Avatar:</strong> <img src={user.avatar} alt="avatar"
+                                              style={{width: '100px', height: '100px'}}/>
             </div>
             <div>
                 <strong>Full Name:</strong> {user.fullName}
@@ -68,7 +60,7 @@ const UserDetail = () => {
                 <strong>Status:</strong> {user.status}
             </div>
         </div>
-    );
-};
+    )
+}
 
 export default UserDetail;
