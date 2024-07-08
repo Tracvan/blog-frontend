@@ -37,6 +37,13 @@ const LoginForm = () => {
             setError('Login failed. Please check your credentials.');
         }
     };
+    function onSignIn(googleUser) {
+        var profile = googleUser.getBasicProfile();
+        console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+        console.log('Name: ' + profile.getName());
+        console.log('Image URL: ' + profile.getImageUrl());
+        console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+    }
 
     return (
         <div className="container">
@@ -59,7 +66,7 @@ const LoginForm = () => {
                     <div className="form-group mb-4">
                         <label htmlFor="password" className="block text-gray-700">Password</label>
                         <input
-                            placeholder= "******"
+                            placeholder="******"
                             type="password"
                             id="password"
                             name="password"
@@ -78,20 +85,27 @@ const LoginForm = () => {
                         in
                     </button>
 
-                    <a href="http://localhost:3000/getpassword" className="block mt-4 text-center text-blue-600 hover:underline">Forgot password?</a>
+                    <a href="http://localhost:3000/getpassword"
+                       className="block mt-4 text-center text-blue-600 hover:underline">Forgot password?</a>
 
                 </form>
 
-                <p className="mt-4 text-center text-gray-600">Register to an existing account? <a href="/register" className="text-blue-600 hover:underline">Register
+                <p className="mt-4 text-center text-gray-600">Register to an existing account? <a href="/register"
+                                                                                                  className="text-blue-600 hover:underline">Register
                     here.</a></p>
                 <div className="social-login">
-                    <button className="btn-social" onClick={() => alert('Login with Google')}>
-                        <img src="https://getnet.mx/media/popup/CHROME.png" alt="Google logo" />
+                    <button onClick={onSignIn} className="btn-social" >
+                        <img src="https://getnet.mx/media/popup/CHROME.png" alt="Google logo"/>
+                    </button>
+                    <button  className="btn-social" onClick={() => alert('Login with Facebook')}>
+                        <img
+                            src="https://image.makewebeasy.net/makeweb/m_750x0/5Re2KiBcb/CUSTOMER/facebook.png?v=202012190947"
+                            alt="Facebook logo"/>
                     </button>
                     <button className="btn-social" onClick={() => alert('Login with Facebook')}>
-                        <img src="https://image.makewebeasy.net/makeweb/m_750x0/5Re2KiBcb/CUSTOMER/facebook.png?v=202012190947" alt="Facebook logo" />
-                    </button><button className="btn-social" onClick={() => alert('Login with Facebook')}>
-                        <img src="https://www.pngitem.com/pimgs/m/488-4889569_tiktok-tik-tok-logo-png-transparent-png.png" alt="Facebook logo" />
+                        <img
+                            src="https://www.pngitem.com/pimgs/m/488-4889569_tiktok-tik-tok-logo-png-transparent-png.png"
+                            alt="Facebook logo"/>
                     </button>
                 </div>
 
