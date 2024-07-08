@@ -4,8 +4,32 @@ import DarkModeSwitcher from "./DarkModeSwitcher";
 import DropdownNotification from "./DropdownNotification";
 import DropdownMessage from "./DropdownMessage";
 import DropdownUser from "./DropdownUser";
+import {useState} from "react";
+import axios from "axios";
 
 const Header = (props) => {
+    const [searchTerm, setSearchTerm] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+
+    const handleSearch = async (event) => {
+        setSearchTerm(event.target.value);
+
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get('http://localhost:8080/api/search', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                params: {
+                    query: event.target.value
+                }
+            });
+
+            setSearchResults(response.data);
+        } catch (error) {
+            console.error('Error fetching search results:', error);
+        }
+    };
     return (
         <header className="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
             <div className="flex flex-grow items-center justify-between px-4 py-4 shadow-2 md:px-6 2xl:px-11">
@@ -21,11 +45,11 @@ const Header = (props) => {
                     >
             <span className="relative block h-5.5 w-5.5 cursor-pointer">
               <span className="du-block absolute right-0 h-full w-full">
-                <span
-                    className={`relative left-0 top-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-[0] duration-200 ease-in-out dark:bg-white ${
-                        !props.sidebarOpen && '!w-full delay-300'
-                    }`}
-                ></span>
+                {/*<span*/}
+                {/*    className={`relative left-0 top-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-[0] duration-200 ease-in-out dark:bg-white ${*/}
+                {/*        !props.sidebarOpen && '!w-full delay-300'*/}
+                {/*    }`}*/}
+                {/*></span>*/}
                 <span
                     className={`relative left-0 top-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-150 duration-200 ease-in-out dark:bg-white ${
                         !props.sidebarOpen && 'delay-400 !w-full'
@@ -85,13 +109,30 @@ const Header = (props) => {
                                 </svg>
                             </button>
 
-                            <input
+                            <input style={{border : 0}}
                                 type="text"
                                 placeholder="Type to search..."
                                 className="w-full bg-transparent pl-9 pr-4 text-black focus:outline-none dark:text-white xl:w-125"
                             />
                         </div>
                     </form>
+                    {/* Show search results dropdown */}
+                    {searchTerm && (
+                        <div className="absolute mt-2 w-full bg-white border border-gray-200 dark:bg-gray-800 dark:border-gray-700 rounded-md shadow-lg max-h-60 overflow-y-auto z-50">
+                            <ul>
+                                {searchResults.map(user => (
+                                    <li key={user.id} className="p-2 border-b border-gray-200 dark:border-gray-700">
+                                        <div className="flex flex-col">
+                                            <span className="font-medium text-gray-800 dark:text-gray-200">{user.username}</span>
+                                            <span className="text-gray-600 dark:text-gray-400">{user.address}</span>
+                                            <span className="text-gray-600 dark:text-gray-400">{user.phoneNumber}</span>
+                                            <span className="text-gray-600 dark:text-gray-400">{user.status}</span>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
                 </div>
 
                 <div className="flex items-center gap-3 2xsm:gap-7">
@@ -112,3 +153,6 @@ const Header = (props) => {
 };
 
 export default Header;
+
+
+

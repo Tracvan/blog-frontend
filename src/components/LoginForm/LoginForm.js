@@ -77,8 +77,8 @@ const LoginForm = () => {
                     <a href="#" className="block mt-4 text-center text-blue-600 hover:underline">Forgot password?</a>
                 </form>
 
-                <p className="mt-4 text-center text-gray-600">Register to an existing account? <a href="/register" className="text-blue-600 hover:underline">Register
-                    here.</a></p>
+                {/*<p className="mt-4 text-center text-gray-600">Register to an existing account? <a href="/register" className="text-blue-600 hover:underline">Register*/}
+                {/*    here.</a></p>*/}
                 <div className="social-login">
                     <button className="btn-social" onClick={() => alert('Login with Google')}>
                         <img src="https://getnet.mx/media/popup/CHROME.png" alt="Google logo" />
