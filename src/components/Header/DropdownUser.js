@@ -3,14 +3,23 @@ import {Link, useNavigate} from 'react-router-dom';
 import ClickOutside from '../ClickOutside';
 import UserOne from '../../images/user/user-01.png';
 import axios from "axios";
+import async from "async";
 
 const DropdownUser = () => {
     const navigate = useNavigate()
     const [dropdownOpen, setDropdownOpen] = useState(false);
+
+    // const getUser = async () =>{
+    //     try{
+    //
+    //         await axios.get('')
+    //     }catch (error)
+    // }
     const logout = async () => {
         try {
             await axios.get('http://localhost:8080/api/auth/logout');
             localStorage.removeItem('token');
+            localStorage.removeItem('authorize')
             navigate("/login");
         } catch (error) {
             console.error('Logout failed', error);

@@ -31,9 +31,13 @@ const LoginForm = () => {
             });
             console.log('Login successful', response.data);
             localStorage.setItem('token', response.data.token);
-            navigate('/admin');
+            localStorage.setItem('authorize', response.data.authorize)
+            if(localStorage.getItem('authorize') === "ROLE_ADMIN"){
+            navigate('/admin')
+            }else {
+                navigate('/user')
+            };
         } catch (error) {
-            console.log(error.response);
             setError('Login failed. Please check your credentials.');
         }
     };
@@ -90,8 +94,7 @@ const LoginForm = () => {
 
                 </form>
 
-                <p className="mt-4 text-center text-gray-600">Register to an existing account? <a href="/register"
-                                                                                                  className="text-blue-600 hover:underline">Register
+                <p className="mt-4 text-center text-gray-600">Register to an existing account? <a href="/register" className="text-blue-600 hover:underline">Register
                     here.</a></p>
                 <div className="social-login">
                     <button onClick={onSignIn} className="btn-social" >
@@ -111,7 +114,9 @@ const LoginForm = () => {
 
 
                 {error && <p className="mt-4 text-center text-red-600">{error}</p>}
-
+                <p className="mt-4 text-center text-gray-600">Register to an existing account? <a href="/register"
+                                                                                                  className="text-blue-600 hover:underline">Register
+                    here.</a></p>
             </div>
         </div>
     );

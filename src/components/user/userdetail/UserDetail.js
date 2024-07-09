@@ -11,18 +11,32 @@ const UserDetail = () => {
     const [user, setUser] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [infoUser, setInfoUser] = useState(null)
+    const [userDTO,setUserDTO] = useState(null);
+
 
     useEffect(() => {
         fetchUser();
     }, [id]);
 
     const fetchUser = async () => {
-        try {
-            const response = await axios.get(`http://localhost:8080/api/userdetail/${id}`);
-            setUser(response.data);
 
-        } catch (error) {
-            console.error("There was an error fetching the user details!", error);
+        let role = localStorage.getItem('authorize')
+        if(role !== "ROLE_ADMIN") {
+            navigate('/access-denined')
+        }
+        else {
+            const token = localStorage.getItem('token');
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            };
+            try {
+                const response = await axios.get(`http://localhost:8080/api/userdetail/${id}`, config);
+                setUser(response.data);
+            } catch (error) {
+                console.error("There was an error fetching the user details!", error);
+            }
         }
     };
 
@@ -45,7 +59,7 @@ const UserDetail = () => {
 
     const handleDelete = async () => {
         try {
-            await axios.delete(`http://localhost:8080/api/admin/users/${id}`);
+                await axios.delete(`http://localhost:8080/api/admin/users/${id}`);
             toast.success('User deleted successfully');
             navigate('/admin/users');
         } catch (error) {
