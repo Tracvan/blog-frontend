@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './LoginForm.css';
 import axios from 'axios';
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
     const navigate = useNavigate();
@@ -77,8 +77,8 @@ const LoginForm = () => {
                     <a href="#" className="block mt-4 text-center text-blue-600 hover:underline">Forgot password?</a>
                 </form>
 
-                <p className="mt-4 text-center text-gray-600">Register to an existing account? <a href="/register" className="text-blue-600 hover:underline">Register
-                    here.</a></p>
+                {/*<p className="mt-4 text-center text-gray-600">Register to an existing account? <a href="/register" className="text-blue-600 hover:underline">Register*/}
+                {/*    here.</a></p>*/}
                 <div className="social-login">
                     <button className="btn-social" onClick={() => alert('Login with Google')}>
                         <img src="https://getnet.mx/media/popup/CHROME.png" alt="Google logo" />
@@ -92,8 +92,17 @@ const LoginForm = () => {
 
 
                 {error && <p className="mt-4 text-center text-red-600">{error}</p>}
-
+                <p className="mt-4 text-center text-gray-600">Register to an existing account? <a href="/register"
+                                                                                                  className="text-blue-600 hover:underline">Register
+                    here.</a></p>
             </div>
+            {/*<div className="terms-and-privacy mt-8 text-center text-gray-500">*/}
+            {/*    By logginggut in or creating an account, you agree to our <a href="/terms"*/}
+            {/*                                                              className="text-blue-600 hover:underline">Terms*/}
+            {/*    and Conditions</a> and <a*/}
+            {/*    href="/privacy" className="text-blue-600 hover:underline">Privacy Policy</a>.<br/>*/}
+            {/*    © 2006 - 2024 Booking.com™ All rights reserved.*/}
+            {/*</div>*/}
         </div>
     );
 };
