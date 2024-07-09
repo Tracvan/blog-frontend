@@ -10,6 +10,7 @@ import RegisterForm from './components/register/RegisterForm';
 import ChangePassword from './components/changepassword/ChangePasswordForm';
 import GetPasswordForm from './components/getpassword/GetPasswordForm';
 import UserDetail from './components/user/userdetail/UserDetail';
+import AccessDenied from "./components/error/AccessDenied";
 
 function App() {
     const [loading, setLoading] = useState(true);
@@ -31,10 +32,11 @@ function App() {
             <Route path={"/admin"} element={<DefaultLayout/>}>
                 <Route path="users" element={<UserList />} />
                 <Route path="posts" element={<Post />} />
-                <Route path="changepassword" element={<ChangePassword />} />
-                <Route path="getpassword" element={<GetPasswordForm />} />
                 <Route path="user/:id" element={<UserDetail />} />
             </Route>
+            <Route path={"/changepassword"} element={<ChangePassword />} />
+            <Route path={"/getpassword"} element={<GetPasswordForm />} />
+            <Route path={"/access-denined"} element={<AccessDenied />} />
         </Routes>
     )
 }

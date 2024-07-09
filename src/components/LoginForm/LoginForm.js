@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import './LoginForm.css';
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, Link } from "react-router-dom";
+import GetPasswordForm from "../getpassword/GetPasswordForm";
 const LoginForm = () => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
-        username: '',
+        usernameOrEmail: '',
         password: ''
     });
 
@@ -26,16 +26,28 @@ const LoginForm = () => {
         console.log(formData)
         try {
             const response = await axios.post('http://localhost:8080/api/auth/login', {
-                "username": formData.username,
+                "usernameOrEmail": formData.usernameOrEmail,
                 "password": formData.password
             });
             console.log('Login successful', response.data);
             localStorage.setItem('token', response.data.token);
-            navigate('/users');
+            localStorage.setItem('authorize', response.data.authorize)
+            if(localStorage.getItem('authorize') === "ROLE_ADMIN"){
+            navigate('/admin')
+            }else {
+                navigate('/user')
+            };
         } catch (error) {
             setError('Login failed. Please check your credentials.');
         }
     };
+    function onSignIn(googleUser) {
+        var profile = googleUser.getBasicProfile();
+        console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+        console.log('Name: ' + profile.getName());
+        console.log('Image URL: ' + profile.getImageUrl());
+        console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+    }
 
     return (
         <div className="container">
@@ -45,11 +57,12 @@ const LoginForm = () => {
                     <div className="form-group mb-4">
                         <label htmlFor="username" className="block text-gray-700">Username</label>
                         <input
+                            placeholder="username or email"
                             type="text"
                             id="username"
-                            name="username"
+                            name="usernameOrEmail"
                             className="w-full px-3 py-2 border rounded-md bg-gray-50 focus:outline-none focus:ring focus:border-blue-300"
-                            value={formData.username}
+                            value={formData.usernameOrEmail}
                             onChange={handleChange}
                             required
                         />
@@ -57,6 +70,7 @@ const LoginForm = () => {
                     <div className="form-group mb-4">
                         <label htmlFor="password" className="block text-gray-700">Password</label>
                         <input
+                            placeholder="******"
                             type="password"
                             id="password"
                             name="password"
@@ -74,19 +88,27 @@ const LoginForm = () => {
                             className="w-full px-5 py-2.5 text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-3 focus:ring-blue-300 font-medium">Log
                         in
                     </button>
-                    <a href="#" className="block mt-4 text-center text-blue-600 hover:underline">Forgot password?</a>
+
+                    <a href="http://localhost:3000/getpassword"
+                       className="block mt-4 text-center text-blue-600 hover:underline">Forgot password?</a>
+
                 </form>
 
-                {/*<p className="mt-4 text-center text-gray-600">Register to an existing account? <a href="/register" className="text-blue-600 hover:underline">Register*/}
-                {/*    here.</a></p>*/}
+                <p className="mt-4 text-center text-gray-600">Register to an existing account? <a href="/register" className="text-blue-600 hover:underline">Register
+                    here.</a></p>
                 <div className="social-login">
-                    <button className="btn-social" onClick={() => alert('Login with Google')}>
-                        <img src="https://getnet.mx/media/popup/CHROME.png" alt="Google logo" />
+                    <button onClick={onSignIn} className="btn-social" >
+                        <img src="https://getnet.mx/media/popup/CHROME.png" alt="Google logo"/>
+                    </button>
+                    <button  className="btn-social" onClick={() => alert('Login with Facebook')}>
+                        <img
+                            src="https://image.makewebeasy.net/makeweb/m_750x0/5Re2KiBcb/CUSTOMER/facebook.png?v=202012190947"
+                            alt="Facebook logo"/>
                     </button>
                     <button className="btn-social" onClick={() => alert('Login with Facebook')}>
-                        <img src="https://image.makewebeasy.net/makeweb/m_750x0/5Re2KiBcb/CUSTOMER/facebook.png?v=202012190947" alt="Facebook logo" />
-                    </button><button className="btn-social" onClick={() => alert('Login with Facebook')}>
-                        <img src="https://www.pngitem.com/pimgs/m/488-4889569_tiktok-tik-tok-logo-png-transparent-png.png" alt="Facebook logo" />
+                        <img
+                            src="https://www.pngitem.com/pimgs/m/488-4889569_tiktok-tik-tok-logo-png-transparent-png.png"
+                            alt="Facebook logo"/>
                     </button>
                 </div>
 
@@ -96,13 +118,6 @@ const LoginForm = () => {
                                                                                                   className="text-blue-600 hover:underline">Register
                     here.</a></p>
             </div>
-            {/*<div className="terms-and-privacy mt-8 text-center text-gray-500">*/}
-            {/*    By logginggut in or creating an account, you agree to our <a href="/terms"*/}
-            {/*                                                              className="text-blue-600 hover:underline">Terms*/}
-            {/*    and Conditions</a> and <a*/}
-            {/*    href="/privacy" className="text-blue-600 hover:underline">Privacy Policy</a>.<br/>*/}
-            {/*    © 2006 - 2024 Booking.com™ All rights reserved.*/}
-            {/*</div>*/}
         </div>
     );
 };

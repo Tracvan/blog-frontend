@@ -35,7 +35,7 @@
 //
 // export default DefaultLayout;
 import React, { useState, ReactNode } from 'react';
-import Header from '../components/header/Header';
+import Header from "../components/Header/Header";
 import Sidebar from '../components/Sidebar/index';
 import {Outlet} from "react-router-dom";
 
