@@ -1,20 +1,35 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import ClickOutside from '../ClickOutside';
-import UserOne from '../../images/user/user-01.png';
 import axios from "axios";
-import async from "async";
+
 
 const DropdownUser = () => {
+    const [currentUser, setCurrentUser] = useState(null)
     const navigate = useNavigate()
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
-    // const getUser = async () =>{
-    //     try{
-    //
-    //         await axios.get('')
-    //     }catch (error)
-    // }
+    useEffect(() => {
+        fetchUsers();
+    }, []);
+    const fetchUsers = async () => {
+        let role = localStorage.getItem('authorize')
+
+            const token = localStorage.getItem('token');
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            };
+            try {
+                const response = await axios.get('http://localhost:8080/api/currentUser', config);
+                setCurrentUser(response.data);
+            } catch (error) {
+                console.log(error)
+            }
+
+    };
+
     const logout = async () => {
         try {
             await axios.get('http://localhost:8080/api/auth/logout');
@@ -26,6 +41,9 @@ const DropdownUser = () => {
             // Xử lý lỗi nếu cần
         }
     }
+    if (!currentUser) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
@@ -36,13 +54,13 @@ const DropdownUser = () => {
             >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
+            {currentUser.fullName}
           </span>
-          <span className="block text-xs">UX Designer</span>
+          <span className="block text-xs">{currentUser.username}</span>
         </span>
 
                 <span className="h-12 w-12 rounded-full">
-          <img src={UserOne} alt="User" />
+          <img src={currentUser.avatar} alt="User" />
         </span>
 
                 <svg
