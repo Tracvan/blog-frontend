@@ -7,16 +7,29 @@ const UserList = () => {
     const [users, setUsers] = useState([]);
     const navigate = useNavigate();
 
+
     useEffect(() => {
         fetchUsers();
     }, []);
 
     const fetchUsers = async () => {
-        try {
-            const response = await axios.get('http://localhost:8080/api/admin/users');
-            setUsers(response.data);
-        } catch (error) {
-            console.error("There was an error fetching the users!", error);
+        let role = localStorage.getItem('authorize')
+        if(role !== "ROLE_ADMIN") {
+            navigate('/access-denined')
+        }
+        else {
+            const token = localStorage.getItem('token');
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            };
+            try {
+                const response = await axios.get('http://localhost:8080/api/admin/users', config);
+                setUsers(response.data);
+            } catch (error) {
+                console.log(error)
+            }
         }
     };
 
