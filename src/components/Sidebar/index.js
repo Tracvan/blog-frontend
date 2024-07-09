@@ -300,7 +300,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                                         fill="white"
                                                     />
                                                 </svg>
-                                                Forms
+                                                User Management
                                                 <svg
                                                     className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
                                                         open && 'rotate-180'
@@ -328,24 +328,24 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                                 <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
                                                     <li>
                                                         <NavLink
-                                                            to="/forms/form-elements"
+                                                            to="/admin/users"
                                                             className={({ isActive }) =>
                                                                 'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
                                                                 (isActive && '!text-white')
                                                             }
                                                         >
-                                                            Form Elements
+                                                            User List
                                                         </NavLink>
                                                     </li>
                                                     <li>
                                                         <NavLink
-                                                            to="/forms/form-layout"
+                                                            to="/admin/users/create"
                                                             className={({ isActive }) =>
                                                                 'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
                                                                 (isActive && '!text-white')
                                                             }
                                                         >
-                                                            Form Layout
+                                                            Add New User
                                                         </NavLink>
                                                     </li>
                                                 </ul>
