@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -19,24 +20,11 @@ const UserDetail = () => {
     }, [id]);
 
     const fetchUser = async () => {
-
-        let role = localStorage.getItem('authorize')
-        if(role !== "ROLE_ADMIN") {
-            navigate('/access-denined')
-        }
-        else {
-            const token = localStorage.getItem('token');
-            const config = {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            };
-            try {
-                const response = await axios.get(`http://localhost:8080/api/userdetail/${id}`, config);
-                setUser(response.data);
-            } catch (error) {
-                console.error("There was an error fetching the user details!", error);
-            }
+        try {
+            const response = await axios.get(`http://localhost:8080/api/users/${id}`);
+            setUser(response.data);
+        } catch (error) {
+            console.error("There was an error fetching the user details!", error);
         }
     };
 
@@ -91,9 +79,7 @@ const UserDetail = () => {
                 <div className="avatar-container mb-4">
                     <img src={user.avatar} alt="avatar" className="avatar" />
                 </div>
-                {/*<div className="avatar-container mb-4">*/}
-                {/*    <img src="https://cellphones.com.vn/sforum/wp-content/uploads/2023/11/avatar-dep-8.jpg" alt="avatar" className="avatar" />*/}
-                {/*</div>*/}
+
 
                 <h1 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{user.username}</h1>
                 <div className="mb-3 font-normal text-gray-700 dark:text-gray-400">
@@ -110,7 +96,7 @@ const UserDetail = () => {
                         onClick={handleToggleLock}
                         className={`inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg ${user.status === 'locked' ? 'bg-green-600 hover:bg-green-700 focus:ring-green-300' : 'bg-yellow-500 hover:bg-yellow-600 focus:ring-yellow-300'}`}
                     >
-                        {user.status === 'Lock' ? 'Unlock' : 'Lock'}
+                        {user.status === 'lock' ? 'Active' : 'Lock'}
                     </button>
                     <button onClick={() => setIsModalOpen(true)} className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-red-300">
                         Delete
