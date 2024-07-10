@@ -15,6 +15,7 @@ function RegisterForm() {
     });
 
     const [errors, setErrors] = useState({
+        username: '',
         email: '',
         password: '',
         confirmPassword: ''
@@ -33,11 +34,16 @@ function RegisterForm() {
     };
 
     const validateField = (name, value) => {
+        let usernameError = errors.username;
         let emailError = errors.email;
         let passwordError = errors.password;
         let confirmPasswordError = errors.confirmPassword;
 
         switch (name) {
+            case 'username' :
+                usernameError =  value.length >= 6 && value.length <= 20
+                    ? ''
+                    : 'Username must be 6-20 characters';
             case 'email':
                 emailError = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i)
                     ? ''
@@ -72,19 +78,18 @@ function RegisterForm() {
 
         if (validateForm()) {
             try {
-                const response = await axios.post('http://localhost:8080/api/register', {
+                const res = await axios.post('http://localhost:8080/api/register', {
                     username: formData.username,
                     email: formData.email,
                     password: formData.password
-                }).then(response => {
-                    console.log(response.data)
                 })
-                setMessage(response.data.message);
-                setMessage(response.message);
-                // Chuyển hướng đến trang đăng nhập sau khi đăng ký thành công
-                navigate('/login');
+                setMessage("Registration Success");
+                setTimeout(()=>{
+                    navigate('/login');
+                },2000)
+
             } catch (error) {
-                setMessage(error.response?.data?.message || 'Registration failed!');
+                setMessage(error.res?.data?.message || 'Registration failed!');
             }
         }
     };

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css';
 import './UserDetail.css';
 
 const UserDetail = () => {
@@ -10,6 +10,7 @@ const UserDetail = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [infoUser, setInfoUser] = useState(null)
     const [userDTO,setUserDTO] = useState(null);
 
 
@@ -18,26 +19,44 @@ const UserDetail = () => {
     }, [id]);
 
     const fetchUser = async () => {
-        try {
-            const response = await axios.get(`http://localhost:8080/api/user/${id}`);
-            setUser(response.data);
-            const userDTOResponse = await axios.get(`http://localhost:8080/api/info/user/1`);
-            setUserDTO(userDTOResponse);
-        } catch (error) {
-            console.error("There was an error fetching the user details!", error);
+
+        let role = localStorage.getItem('authorize')
+        if(role !== "ROLE_ADMIN") {
+            navigate('/access-denined')
+        }
+        else {
+            const token = localStorage.getItem('token');
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            };
+            try {
+                const response = await axios.get(`http://localhost:8080/api/userdetail/${id}`, config);
+                setUser(response.data);
+            } catch (error) {
+                console.error("There was an error fetching the user details!", error);
+            }
         }
     };
 
     const handleToggleLock = async () => {
+        const token = localStorage.getItem('token');
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        };
+
         try {
-            if (user.status === 'locked') {
-                await axios.put(`http://localhost:8080/api/admin/users/unlock/${id}`);
+            if (user.status === 'Lock') {
+                await axios.put(`http://localhost:8080/api/admin/users/unlock/${id}`, null, config);
                 toast.success('User unlocked successfully');
-                setUser({ ...user, status: 'unlocked' });
-            } else {
-                await axios.put(`http://localhost:8080/api/admin/users/lock/${id}`);
+                setUser({ ...user, status: 'Active' });
+            } else if (user.status === 'Active') {
+                await axios.put(`http://localhost:8080/api/admin/users/lock/${id}`, null, config);
                 toast.success('User locked successfully');
-                setUser({ ...user, status: 'locked' });
+                setUser({ ...user, status: 'Lock' });
             }
         } catch (error) {
             console.error("There was an error toggling the user lock status!", error);
@@ -70,7 +89,7 @@ const UserDetail = () => {
             <div className="w-full max-w-lg p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                 <ToastContainer />
                 <div className="avatar-container mb-4">
-                    <img src={userDTO.avatar} alt="avatar" className="avatar" />
+                    <img src={user.avatar} alt="avatar" className="avatar" />
                 </div>
                 {/*<div className="avatar-container mb-4">*/}
                 {/*    <img src="https://cellphones.com.vn/sforum/wp-content/uploads/2023/11/avatar-dep-8.jpg" alt="avatar" className="avatar" />*/}
@@ -80,18 +99,18 @@ const UserDetail = () => {
                 <div className="mb-3 font-normal text-gray-700 dark:text-gray-400">
                     <p><strong>Username:</strong> {user.username}</p>
                     <p><strong>Email:</strong> {user.email}</p>
-                    <p><strong>Created At:</strong> {formatDate(userDTO.date)}</p>
-                    <p><strong>Full Name:</strong> {userDTO.fullName}</p>
-                    <p><strong>Address:</strong> {userDTO.address}</p>
-                    <p><strong>Phone Number:</strong> {userDTO.phoneNumber}</p>
-                    <p><strong>Status:</strong> {userDTO.status}</p>
+                    <p><strong>Created At:</strong> {formatDate(user.date)}</p>
+                    <p><strong>Full Name:</strong> {user.fullName}</p>
+                    <p><strong>Address:</strong> {user.address}</p>
+                    <p><strong>Phone Number:</strong> {user.phoneNumber}</p>
+                    <p><strong>Status:</strong> {user.status}</p>
                 </div>
                 <div className="actions flex justify-between">
                     <button
                         onClick={handleToggleLock}
                         className={`inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg ${user.status === 'locked' ? 'bg-green-600 hover:bg-green-700 focus:ring-green-300' : 'bg-yellow-500 hover:bg-yellow-600 focus:ring-yellow-300'}`}
                     >
-                        {user.status === 'locked' ? 'Unlock' : 'Lock'}
+                        {user.status === 'Lock' ? 'Unlock' : 'Lock'}
                     </button>
                     <button onClick={() => setIsModalOpen(true)} className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-red-300">
                         Delete
