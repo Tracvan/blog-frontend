@@ -98,8 +98,7 @@ function ChangePasswordForm() {
 
         }
         catch (error) {
-            console.log(error)
-
+            setMessage({text: "Make sure your current password is valid", type: "error"})
         }
     };
 

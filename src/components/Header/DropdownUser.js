@@ -134,7 +134,7 @@ const DropdownUser = () => {
                         </li>
                         <li>
                             <Link
-                                to="/settings"
+                                to="/changepassword"
                                 className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
                             >
                                 <svg
@@ -154,7 +154,7 @@ const DropdownUser = () => {
                                         fill=""
                                     />
                                 </svg>
-                                Account Settings
+                                Change My Password
                             </Link>
                         </li>
                     </ul>
