@@ -64,7 +64,7 @@ const UpdateProfile = () => {
                             type="text"
                             name="username"
                             value={user.username}
-                            onChange={handleChange}
+                            readOnly
                             className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:shadow-outline bg-transparent"
                         />
                     </div>
@@ -74,7 +74,7 @@ const UpdateProfile = () => {
                             type="email"
                             name="email"
                             value={user.email}
-                            onChange={handleChange}
+                            readOnly
                             className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:shadow-outline bg-transparent"
                         />
                     </div>
