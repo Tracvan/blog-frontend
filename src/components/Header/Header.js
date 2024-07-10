@@ -11,8 +11,10 @@ const Header = (props) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
 
+
+
     const handleSearch = async (event) => {
-        setSearchTerm(event.target.value);
+        // setSearchTerm(event.target.value);
 
         try {
             const token = localStorage.getItem('token');
@@ -110,6 +112,7 @@ const Header = (props) => {
                             </button>
 
                             <input style={{border : 0}}
+                                   onChange={handleSearch}
                                 type="text"
                                 placeholder="Type to search..."
                                 className="w-full bg-transparent pl-9 pr-4 text-black focus:outline-none dark:text-white xl:w-125"

@@ -18,7 +18,7 @@ const UserDetail = () => {
 
     const fetchUser = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/admin/users/${id}`);
+            const response = await axios.get(`http://localhost:8080/api/users/${id}`);
             setUser(response.data);
         } catch (error) {
             console.error("There was an error fetching the user details!", error);
