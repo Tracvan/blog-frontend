@@ -70,7 +70,6 @@ const LoginForm = () => {
                     <div className="form-group mb-4">
                         <label htmlFor="password" className="block text-gray-700">Password</label>
                         <input
-                            placeholder="******"
                             type="password"
                             id="password"
                             name="password"
