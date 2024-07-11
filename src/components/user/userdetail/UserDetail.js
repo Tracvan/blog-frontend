@@ -11,34 +11,51 @@ const UserDetail = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [infoUser, setInfoUser] = useState(null)
+    const [userDTO,setUserDTO] = useState(null);
+
 
     useEffect(() => {
         fetchUser();
     }, [id]);
 
     const fetchUser = async () => {
-        const token = localStorage.getItem('token')
+
+        let role = localStorage.getItem('authorize')
+        if(role !== "ROLE_ADMIN") {
+            navigate('/access-denined')
+        }
+        else {
+            const token = localStorage.getItem('token');
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            };
+            try {
+                const response = await axios.get(`http://localhost:8080/api/userdetail/${id}`, config);
+                setUser(response.data);
+            } catch (error) {
+                console.error("There was an error fetching the user details!", error);
+            }
+        }
+    };
+
+    const handleToggleLock = async () => {
+        const token = localStorage.getItem('token');
         const config = {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         };
-        try {
-            const response = await axios.get(`http://localhost:8080/api/admin/users/${id}`,config);
-            setUser(response.data);
-        } catch (error) {
-            console.error("There was an error fetching the user details!", error);
-        }
-    };
 
-    const handleToggleLock = async () => {
         try {
             if (user.status === 'Lock') {
-                await axios.put(`http://localhost:8080/api/admin/users/unlock/${id}`);
+                await axios.put(`http://localhost:8080/api/admin/users/unlock/${id}`, null, config);
                 toast.success('User unlocked successfully');
                 setUser({ ...user, status: 'Active' });
-            } else {
-                await axios.put(`http://localhost:8080/api/admin/users/lock/${id}`);
+            } else if (user.status === 'Active') {
+                await axios.put(`http://localhost:8080/api/admin/users/lock/${id}`, null, config);
                 toast.success('User locked successfully');
                 setUser({ ...user, status: 'Lock' });
             }
@@ -92,7 +109,7 @@ const UserDetail = () => {
                         onClick={handleToggleLock}
                         className={`inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg ${user.status === 'locked' ? 'bg-green-600 hover:bg-green-700 focus:ring-green-300' : 'bg-yellow-500 hover:bg-yellow-600 focus:ring-yellow-300'}`}
                     >
-                        {user.status === 'lock' ? 'Active' : 'Lock'}
+                        {user.status === 'Lock' ? 'Unlock' : 'Lock'}
                     </button>
                     <button onClick={() => setIsModalOpen(true)} className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-red-300">
                         Delete

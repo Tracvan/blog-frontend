@@ -61,7 +61,7 @@ const UpdateProfile = () => {
                     <div className="mb-3">
                         <label className="block text-gray-700 dark:text-gray-400">Username</label>
                         <input
-                            type="text"
+                            readOnly
                             name="username"
                             value={user.username}
                             onChange={handleChange}
@@ -71,7 +71,7 @@ const UpdateProfile = () => {
                     <div className="mb-3">
                         <label className="block text-gray-700 dark:text-gray-400">Email</label>
                         <input
-                            type="email"
+                            readOnly
                             name="email"
                             value={user.email}
                             onChange={handleChange}

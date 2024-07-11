@@ -20,6 +20,7 @@ function App() {
     const { pathname } = useLocation();
     const token = localStorage.getItem('token')
     const navigate = useNavigate()
+
     if(token === null){
         navigate('/login')
     }
@@ -29,6 +30,7 @@ function App() {
     }, [pathname]);
 
     useEffect(() => {
+
         setTimeout(() => setLoading(false), 1000);
     }, []);
 
@@ -50,6 +52,7 @@ function App() {
             <Route path={"/changepassword"} element={<ChangePassword />} />
             <Route path={"/getpassword"} element={<GetPasswordForm />} />
             <Route path={"/access-denined"} element={<AccessDenied />} />
+
         </Routes>
     )
 }

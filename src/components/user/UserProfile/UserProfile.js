@@ -49,7 +49,7 @@ const UserProfile = () => {
                     <p><strong>Phone Number:</strong> {user.phoneNumber}</p>
                 </div>
                 <div className="actions flex justify-between">
-                    <Link to={`/user/update/${id}`} className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700">Update</Link>
+                    <Link to={`/user/update/${id}`} className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-blue-300">Update</Link>
                 </div>
 
                 {isModalOpen && (
