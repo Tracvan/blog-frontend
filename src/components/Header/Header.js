@@ -16,7 +16,7 @@ const Header = (props) => {
     const navigate = useNavigate();
 
     const handleSearch = async (event) => {
-        if (event) event.preventDefault();  // chặn hành động mặc định của form nếu có sự kiện
+        if (event) event.preventDefault();
 
         const token = localStorage.getItem('token');
         const config = {
@@ -38,7 +38,7 @@ const Header = (props) => {
         if (searchTerm) {
             handleSearch();
         }
-    }, [currentPage, searchTerm]);  //chỉ gọi handleSearch khi searchTerm hoặc currentPage thay đổi
+    }, [currentPage, searchTerm]);
 
 
     const formatDate = (dateString) => {
