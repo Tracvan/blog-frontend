@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -91,9 +92,7 @@ const UserDetail = () => {
                 <div className="avatar-container mb-4">
                     <img src={user.avatar} alt="avatar" className="avatar" />
                 </div>
-                {/*<div className="avatar-container mb-4">*/}
-                {/*    <img src="https://cellphones.com.vn/sforum/wp-content/uploads/2023/11/avatar-dep-8.jpg" alt="avatar" className="avatar" />*/}
-                {/*</div>*/}
+
 
                 <h1 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{user.username}</h1>
                 <div className="mb-3 font-normal text-gray-700 dark:text-gray-400">

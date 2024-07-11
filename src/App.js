@@ -1,6 +1,6 @@
 
 import React, {useEffect, useState} from 'react';
-import {Route, Routes, useLocation} from 'react-router-dom';
+import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 import UserList from './components/user/userlist/UserList';
 import DefaultLayout from "./layout/DefaultLayout";
 import "./css/style.css"
@@ -18,12 +18,19 @@ import AccessDenied from "./components/error/AccessDenied";
 function App() {
     const [loading, setLoading] = useState(true);
     const { pathname } = useLocation();
+    const token = localStorage.getItem('token')
+    const navigate = useNavigate()
+
+    if(token === null){
+        navigate('/login')
+    }
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [pathname]);
 
     useEffect(() => {
+
         setTimeout(() => setLoading(false), 1000);
     }, []);
 
@@ -45,6 +52,7 @@ function App() {
             <Route path={"/changepassword"} element={<ChangePassword />} />
             <Route path={"/getpassword"} element={<GetPasswordForm />} />
             <Route path={"/access-denined"} element={<AccessDenied />} />
+
         </Routes>
     )
 }
