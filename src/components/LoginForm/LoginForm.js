@@ -33,7 +33,7 @@ const LoginForm = () => {
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('authorize', response.data.authorize)
             if(localStorage.getItem('authorize') === "ROLE_ADMIN"){
-            navigate('/admin')
+            navigate('/admin/users')
             }else {
                 navigate('/user')
             };
