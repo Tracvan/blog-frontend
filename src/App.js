@@ -11,6 +11,7 @@ import ChangePassword from './components/changepassword/ChangePasswordForm';
 import GetPasswordForm from './components/getpassword/GetPasswordForm';
 import UserDetail from './components/user/userdetail/UserDetail';
 import AccessDenied from "./components/error/AccessDenied";
+import BlogPost from "./components/post/BlogPost";
 
 function App() {
     const [loading, setLoading] = useState(true);
@@ -38,15 +39,15 @@ function App() {
             <Route path="/register" element={<RegisterForm />} />
             <Route path={"/admin"} element={<DefaultLayout/>}>
                 <Route path="users" element={<UserList />} />
-                <Route path="posts" element={<Post />} />
                 <Route path="user/:id" element={<UserDetail />} />
-
-
-
+            </Route>
             <Route path={"/changepassword"} element={<ChangePassword />} />
             <Route path={"/getpassword"} element={<GetPasswordForm />} />
             <Route path={"/access-denined"} element={<AccessDenied />} />
-
+            <Route path={"/"} element={<DefaultLayout/>}>
+            <Route path="posts" element={<Post />} />
+            <Route path="posts/:id" element={<BlogPost />} />
+            </Route>
 
         </Routes>
     )
