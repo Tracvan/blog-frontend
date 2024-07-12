@@ -5,6 +5,10 @@ import {useParams} from "react-router-dom";
 const BlogPost = () => {
     const { id } = useParams()
     const [post, setPost] = useState({});
+    const [formData, setFormData] = useState({
+        content: '',
+        post_id: {id}
+    });
 
     useEffect(() => {
         fetchPosts();
@@ -32,6 +36,47 @@ const BlogPost = () => {
     if(!post){
         return <div>Loading....</div>
     }
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+
+    };
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const token = localStorage.getItem('token');
+
+
+        try {
+            const response = await axios.post('http://localhost:8080/api/comments',{
+                    content: formData.content,
+                    post_id : id
+                 },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+            console.log("Comment has been posted")
+            setFormData({
+                content: '',
+                post_id: id,
+            })
+
+        }
+        catch (error) {
+            console.log(error)
+            console.log(formData.post_id)
+            console.log(formData.content)
+            console.log({
+                content: formData.content,
+                post_id : formData.post_id
+            })
+        }
+    };
 
     return (
         <div className="max-w-4xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
@@ -92,9 +137,9 @@ const BlogPost = () => {
                     </div>
                 )}
             </div>
-            <form className=" w-full bg-white rounded-lg border p-2 mx-auto mt-20">
+            <form onSubmit={handleSubmit} className=" w-full bg-white rounded-lg border p-2 mx-auto mt-20">
                 <div className="px-3 mb-2 mt-2">
-                    <textarea placeholder="comment"
+                    <textarea name="content" placeholder="comment" onChange={handleChange} value={formData.content}
                               className="w-full bg-gray-100 rounded border border-gray-400 leading-normal resize-none h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white"></textarea>
                 </div>
                 <div className="w-full flex justify-end px-4">
