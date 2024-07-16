@@ -14,14 +14,13 @@ const UserDetail = () => {
     const [infoUser, setInfoUser] = useState(null)
     const [userDTO,setUserDTO] = useState(null);
 
-
     useEffect(() => {
         fetchUser();
     }, [id]);
 
     const fetchUser = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/users/${id}`);
+            const response = await axios.get(`http://localhost:8080/api/user/${id}`);
             setUser(response.data);
         } catch (error) {
             console.error("There was an error fetching the user details!", error);

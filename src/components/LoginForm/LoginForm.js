@@ -35,7 +35,7 @@ const LoginForm = () => {
             if(localStorage.getItem('authorize') === "ROLE_ADMIN"){
             navigate('/admin/users')
             }else {
-                navigate('/user')
+                navigate('/posts')
             };
         } catch (error) {
             setError('Login failed. Please check your credentials.');
