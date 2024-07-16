@@ -59,7 +59,6 @@ function App() {
                 <Route path="/profile/:id" element={<UserProfile/>}/>
                 <Route path={"/update/:id"} element={<UpdateProfile/>}/>
                 <Route path="posts/:id" element={<BlogPost/>}/>
-
                 <Route path="posts" element={<Post/>}/>
 
             </Route>

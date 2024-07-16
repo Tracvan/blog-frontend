@@ -81,7 +81,7 @@ useEffect(() =>{
 
     return (
         <>
-            <div className="space-y-6 overflow-y-auto" onScroll={handleScroll}>
+            <div className="space-y-6 overflow-y-auto">
 
                 {posts.map((post) => (
                     <Link key={post.id} to={`/posts/${post.id}`}
