@@ -1,0 +1,4 @@
+.extended-width {
+    width: calc(100% );
+    max-width: calc(100% );
+}

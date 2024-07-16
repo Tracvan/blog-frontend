@@ -5,18 +5,34 @@ import 'tailwindcss/tailwind.css'; // Import Tailwind CSS
 
 const UserList = () => {
     const [users, setUsers] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
     const navigate = useNavigate();
+
 
     useEffect(() => {
         fetchUsers();
     }, []);
 
     const fetchUsers = async () => {
-        try {
-            const response = await axios.get('http://localhost:8080/api/admin/users');
-            setUsers(response.data);
-        } catch (error) {
-            console.error("There was an error fetching the users!", error);
+        let role = localStorage.getItem('authorize')
+        if(role !== "ROLE_ADMIN") {
+            navigate('/access-denined')
+        }
+        else {
+            const token = localStorage.getItem('token');
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            };
+            try {
+                const response = await axios.get('http://localhost:8080/api/admin/users', config);
+                setUsers(response.data);
+                setSearchResults(response.data); // Ban đầu searchResults bằng với users
+            } catch (error) {
+                console.log(error)
+            }
         }
     };
 
@@ -25,6 +41,21 @@ const UserList = () => {
         return new Date(dateString).toLocaleDateString('en-GB', options);
     };
 
+    // const filteredUsers = users.filter(user =>
+    //     user.username.toLowerCase().includes(searchTerm.toLowerCase())
+    // );
+    const handleSearch = (e) => {
+        setSearchTerm(e.target.value);
+        if (e.target.value === '') {
+            setSearchResults(users);
+        } else {
+            const filtered = users.filter(user =>
+                user.username.toLowerCase().includes(e.target.value.toLowerCase())
+            );
+            setSearchResults(filtered);
+        }
+    }
+
     return (
         <div className="w-full px-4 sm:px-8">
             <div className="py-8">
@@ -32,13 +63,20 @@ const UserList = () => {
                     <h1 className="text-2xl font-semibold leading-tight text-gray-100 uppercase tracking-wider">
                         User List
                     </h1>
+                    <input
+                        type="text"
+                        placeholder="Search by username"
+                        className="px-4 py-2 rounded-lg bg-gray-800 text-gray-100"
+                        value={searchTerm}
+                        onChange={handleSearch}
+                    />
                 </div>
                 <div className="overflow-x-auto">
                     <div className="w-full shadow rounded-lg overflow-hidden bg-transparent">
                         <table className="w-full leading-normal bg-transparent">
                             <thead>
                             <tr>
-                                <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider bg-transparent">
+                            <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider bg-transparent">
                                     Username
                                 </th>
                                 <th className="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider bg-transparent">
@@ -59,7 +97,8 @@ const UserList = () => {
                             </tr>
                             </thead>
                             <tbody>
-                            {users.map((user) => (
+                            {/*{filteredUsers.map((user) => (*/}
+                            {(searchTerm ? searchResults : users).map((user) => (
                                 <tr key={user.id} className="bg-transparent">
                                     <td className="px-5 py-5 border-b border-gray-200 bg-transparent text-sm">
                                         <p className="text-gray-100 whitespace-no-wrap">{user.username}</p>
