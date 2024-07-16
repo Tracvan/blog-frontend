@@ -9,16 +9,9 @@ function Post() {
     const [hasMore, setHasMore] = useState(true);
     const pageSize = 5;
 
-
     const loadPosts = async (page, size) => {
-        const token = localStorage.getItem('token');
-        const config = {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        };
         try {
-            const response = await axios.get(`http://localhost:8080/api/posts/public?page=${page}&size=${size}`, config);
+            const response = await axios.get(`http://localhost:8080/api/posts/public?page=${page}&size=${size}`);
             const data = response.data;
             setPosts(prev => [...prev, ...data]);
             setHasMore(data.length === size);
@@ -26,8 +19,6 @@ function Post() {
             console.error("Error loading posts:", error);
         }
     };
-
-
     useEffect(() => {
         handleScroll();
     }, []);

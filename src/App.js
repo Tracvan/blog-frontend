@@ -23,9 +23,9 @@ function App() {
     const token = localStorage.getItem('token')
     const navigate = useNavigate()
 
-    if (token === null) {
-        navigate('/login')
-    }
+    // if (token === null) {
+    //     navigate('/login')
+    // }
 
     useEffect(() => {
         window.scrollTo(0, 0);

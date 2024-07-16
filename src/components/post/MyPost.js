@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 function Post() {
     let [largestPosition, setLargestPosition] = useState(150);
@@ -8,8 +8,6 @@ function Post() {
     const [currentPage, setCurrentPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
     const pageSize = 5;
-
-
 
     const loadPosts = async (page, size) => {
         const token = localStorage.getItem('token');
@@ -54,7 +52,6 @@ function Post() {
         const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
         return new Date(dateString).toLocaleDateString('en-GB', options);
     };
-
 
     return (
         <div className="space-y-6">
