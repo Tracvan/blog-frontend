@@ -1,8 +1,16 @@
+
+
+
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { storage } from "../../../../../blog-frontend/src/components/PostForm/Firebase"; // Adjust the path to your Firebase configuration
+
+import { v4 } from "uuid";
 
 const UpdateProfile = () => {
     const { id } = useParams();
@@ -16,6 +24,7 @@ const UpdateProfile = () => {
         address: '',
         phoneNumber: ''
     });
+    const [selectedFile, setSelectedFile] = useState(null);
 
     useEffect(() => {
         fetchUser();
@@ -30,6 +39,10 @@ const UpdateProfile = () => {
         }
     };
 
+    const handleFileChange = (event) => {
+        setSelectedFile(event.target.files[0]);
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setUser({ ...user, [name]: value });
@@ -37,8 +50,21 @@ const UpdateProfile = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        let avatarUrl = user.avatar;
+        if (selectedFile) {
+            const imageRef = ref(storage, `avatars/${selectedFile.name + v4()}`);
+            const snapshot = await uploadBytes(imageRef, selectedFile);
+            avatarUrl = await getDownloadURL(snapshot.ref);
+        }
+
+        const updatedUser = {
+            ...user,
+            avatar: avatarUrl,
+        };
+
         try {
-            await axios.put(`http://localhost:8080/api/users/profile/${id}`, user);
+            await axios.put(`http://localhost:8080/api/users/profile/${id}`, updatedUser);
             toast.success("User profile updated successfully!");
             navigate(`/user/profile/${id}`);
         } catch (error) {
@@ -56,7 +82,11 @@ const UpdateProfile = () => {
                 <ToastContainer />
                 <form onSubmit={handleSubmit}>
                     <div className="avatar-container mb-4">
-                        <img src={user.avatar} alt="avatar" className="avatar" />
+                        <img src={user.avatar} alt="avatar" className="avatar w-32 h-32 object-cover rounded-full mx-auto" />
+                        <input type="file" onChange={handleFileChange} className="mt-2" />
+                        {selectedFile && (
+                            <img src={URL.createObjectURL(selectedFile)} alt="Preview" className="mt-2 w-32 h-32 object-cover rounded-full mx-auto" />
+                        )}
                     </div>
                     <div className="mb-3">
                         <label className="block text-gray-700 dark:text-gray-400">Username</label>
@@ -64,7 +94,6 @@ const UpdateProfile = () => {
                             readOnly
                             name="username"
                             value={user.username}
-                            readOnly
                             className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:shadow-outline bg-transparent"
                         />
                     </div>
@@ -74,7 +103,6 @@ const UpdateProfile = () => {
                             readOnly
                             name="email"
                             value={user.email}
-                            readOnly
                             className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:shadow-outline bg-transparent"
                         />
                     </div>
