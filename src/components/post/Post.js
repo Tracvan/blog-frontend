@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
 function Post() {
     let [largestPosition, setLargestPosition] = useState(150);
@@ -9,8 +9,6 @@ function Post() {
     const [hasMore, setHasMore] = useState(true);
     const pageSize = 5;
     let [searchTerm, setSearchTerm] = useState('h');
-    const [currentPageSearch, setCurrentPageSearch] = useState(0);
-    const searchPageSize  = 5;
 
     const loadPosts = async (page, size) => {
         try {
@@ -22,20 +20,20 @@ function Post() {
             console.error("Error loading posts:", error);
         }
     };
-
     useEffect(() => {
         handleScroll();
     }, []);
-
-    const handleScroll = () => {
-        window.addEventListener('scroll', function () {
+    const handleScroll =  () => {
+        window.addEventListener('scroll', function() {
             var scrollPosition = window.pageYOffset;
             if (scrollPosition >= largestPosition) {
-                setTimeout(() => {
+                console.log(scrollPosition)
+                setTimeout(()=>{
                     setCurrentPage(prevPage => prevPage + 1)
-                }, 1000);
+                },1000)
                 largestPosition += 200;
                 setLargestPosition(largestPosition);
+
             }
         });
     };
@@ -43,12 +41,10 @@ function Post() {
     useEffect(() => {
         loadPosts(currentPage, pageSize);
     }, [currentPage]);
-
     const formatDate = (dateString) => {
         const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
         return new Date(dateString).toLocaleDateString('en-GB', options);
     };
-
     const handleSearch = async (event) => {
         if (event) event.preventDefault();
 
@@ -60,8 +56,9 @@ function Post() {
         };
 
         try {
-            const response = await axios.get(`http://localhost:8080/api/posts/search?input=${searchTerm}&page=${currentPageSearch}&size=${searchPageSize}`);
-            setPosts(response.data);
+            const response = await axios.get(`http://localhost:8080/api/posts/search?input=${searchTerm}`);
+            setPosts(response.data)
+            setHasMore(false)
         } catch (error) {
             console.log('Error fetching search results:', error);
         }
@@ -76,7 +73,6 @@ function Post() {
         }
         handleSearch();
     }, [searchTerm]);
-
     return (
         <div className="space-y-6 space-x-0">
             <form className="max-w-xl ml-180" onSubmit={handleSearch}>
@@ -105,7 +101,7 @@ function Post() {
                         </svg>
                     </button>
                     <input
-                        style={{ border: 0 }}
+                        style={{border: 0}}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         type="text"
                         placeholder="Type to search..."
@@ -114,9 +110,9 @@ function Post() {
                 </div>
             </form>
             {posts.map((post) => (
-                <div className="space-y-6" key={post.id}>
-                    <Link to={`/posts/${post.id}`}
-                          className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 extended-width relative">
+                <div className="space-y-6">
+                    <Link key={post.id} to={`/posts/${post.id}`}
+                          className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row  hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 extended-width relative ">
                         <img
                             className="object-cover w-9 max-h-30 rounded-t-lg h-50 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
                             src={post.image}
