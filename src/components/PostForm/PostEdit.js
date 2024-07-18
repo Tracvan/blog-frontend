@@ -19,6 +19,29 @@ const PostEdit = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [content, setContent] = useState("");
 
+        useEffect(() => {
+            function hideError(e) {
+                if (e.message === 'ResizeObserver loop completed with undelivered notifications.') {
+                    const resizeObserverErrDiv = document.getElementById(
+                        'webpack-dev-server-client-overlay-div'
+                    );
+                    const resizeObserverErr = document.getElementById(
+                        'webpack-dev-server-client-overlay'
+                    );
+                    if (resizeObserverErr) {
+                        resizeObserverErr.setAttribute('style', 'display: none');
+                    }
+                    if (resizeObserverErrDiv) {
+                        resizeObserverErrDiv.setAttribute('style', 'display: none');
+                    }
+                }
+            }
+            window.addEventListener('error', hideError)
+            return () => {
+                window.addEventListener('error', hideError)
+            }
+        }, [])
+
     useEffect(() => {
         const fetchPost = async () => {
             try {
@@ -87,7 +110,7 @@ const PostEdit = () => {
     }
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="max-h-242.5 fixed inset-0 z-9999 flex items-center justify-center bg-black bg-opacity-50">
             <div className="relative w-full max-w-4xl bg-white rounded-lg shadow dark:bg-gray-700">
                 <div className="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -116,12 +139,13 @@ const PostEdit = () => {
                                         as="textarea"
                                         name="title"
                                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                        autoComplete="off"
                                     />
                                     <ErrorMessage name="title" component="span" className="text-red-500 text-sm" />
                                 </div>
-                                <div className="col-span-2">
+                                <div className="col-span-2 overflow-y-auto " style={{maxHeight : 150}}>
                                     <label className="block text-sm font-medium text-gray-900 dark:text-white">Content</label>
-                                    <div className="max-h-96 overflow-y-auto">
+                                    <div>
                                         <CKEditor
                                             editor={Editor}
                                             data={content}
@@ -141,6 +165,7 @@ const PostEdit = () => {
                                         as="textarea"
                                         name="description"
                                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                        autoComplete="off"
                                     />
                                 </div>
                                 <div className="col-span-2">
@@ -151,6 +176,7 @@ const PostEdit = () => {
                                         type="file"
                                         onChange={handleFileChange}
                                         className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                        autoComplete="off"
                                     />
                                     {selectedFile ? (
                                         <img src={URL.createObjectURL(selectedFile)} alt="Preview" className="mt-2 w-32 h-20 object-cover" />

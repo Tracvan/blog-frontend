@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import {useNavigate, useParams} from "react-router-dom";
 import {toast, ToastContainer} from "react-toastify";
-import Header from "../Header/Header";
+import postEdit from "../PostForm/PostEdit";
 
 const BlogPost = () => {
     const { id } = useParams()
@@ -93,6 +93,9 @@ const BlogPost = () => {
             })
         }
     };
+    const editPost = () => {
+        navigate(`/posts/${id}/edit`)
+    }
     const deletePost = async () => {
         const token = localStorage.getItem('token');
         const config = {
@@ -104,24 +107,20 @@ const BlogPost = () => {
             const response = await axios.delete(`http://localhost:8080/api/posts/${id}`, config);
             toast.success('Post deleted successfully');
             setTimeout(() =>{
-                navigate("/users/mypost")
+                navigate("/mypost")
             },1500)
 
         } catch (error) {
             console.log(error);
         }
     }
-    // const showChoice = () =>{
-    //     if(post.username = )
-    //     setIsOwnPost(true)
-    // }
     return (
-        <div className="max-w-4xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+        <div className=" mx-auto relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
             <ToastContainer />
             {isOwnPost && (
             <button onClick={dropDownMenu} id="dropdownMenuIconHorizontalButton"
                     data-dropdown-toggle="dropdownDotsHorizontal"
-                    className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600 ml-203"
+                    className=" absolute right-4 inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600 "
                     type="button">
                 <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                      fill="currentColor" viewBox="0 0 16 3">
@@ -132,11 +131,11 @@ const BlogPost = () => {
             )}
             <div
                 id="dropdownDotsHorizontal"
-                className={`z-10 ${isOpen ? "" : "hidden"} z-40 absolute  bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600 ml-171.5` }>
+                className={`z-10 ${isOpen ? "" : "hidden"}  z-40 absolute right-14 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600 ml-171.5` }>
                 <ul className="py-2 text-sm text-gray-700 dark:text-gray-200"
                     aria-labelledby="dropdownMenuIconHorizontalButton">
                     <li>
-                        <div
+                        <div onClick={editPost}
                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit post</div>
                     </li>
                     <li>
@@ -174,8 +173,6 @@ const BlogPost = () => {
             <h1 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">
                 {post.title}
             </h1>
-
-            {/* Thông tin người dùng và thời gian */}
             <div className="flex items-center mb-4">
                 <img
                     src={post.userAvatar}
@@ -187,23 +184,16 @@ const BlogPost = () => {
                     <p className="text-sm text-gray-500 dark:text-gray-400"> {formatDate(post.time)}</p>
                 </div>
             </div>
-
-            {/* Hình ảnh chính */}
             <img
                 src={post.image}
                 alt="Blog cover"
-                className="w-full h-64 object-cover rounded-lg mb-6"
+                className="w-full h-auto object-cover rounded-lg mb-6"
             />
-
-            {/* Nội dung */}
             <div className="prose dark:prose-invert max-w-none mb-8">
                 <p>
                     {post.content}
                 </p>
             </div>
-
-
-            {/* Phần bình luận */}
             <div>
                 <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Comments</h2>
                 {post.commentsDTO?.map((comment) =>
@@ -223,8 +213,6 @@ const BlogPost = () => {
                                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{formatDate(comment.time)}</p>
                             </div>
                         </div>
-
-                        {/* Thêm các bình luận khác ở đây */}
                         <div className="my-4 border-b border-gray-200 dark:border-gray-700"></div>
                     </div>
                 )}
