@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Post() {
     let [largestPosition, setLargestPosition] = useState(150);
@@ -26,21 +26,19 @@ function Post() {
         }
     };
 
-
     useEffect(() => {
         handleScroll();
     }, []);
-    const handleScroll =  () => {
-        window.addEventListener('scroll', function() {
+
+    const handleScroll = () => {
+        window.addEventListener('scroll', function () {
             var scrollPosition = window.pageYOffset;
             if (scrollPosition >= largestPosition) {
-                console.log(scrollPosition)
-                setTimeout(()=>{
+                setTimeout(() => {
                     setCurrentPage(prevPage => prevPage + 1)
-                },1000)
+                }, 1000);
                 largestPosition += 200;
                 setLargestPosition(largestPosition);
-
             }
         });
     };
@@ -48,6 +46,7 @@ function Post() {
     useEffect(() => {
         loadPosts(currentPage, pageSize);
     }, [currentPage]);
+
     const formatDate = (dateString) => {
         const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
         return new Date(dateString).toLocaleDateString('en-GB', options);
@@ -71,9 +70,11 @@ function Post() {
                         <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
                             {post.description}
                         </p>
+                        <div className="post-detail-main-content"
+                             dangerouslySetInnerHTML={{ __html: post.content }} />
                         <div className="flex items-center">
                             <img
-                                className=" object-cover w-8 h-8 rounded-full"
+                                className="object-cover w-8 h-8 rounded-full"
                                 src={post.userAvatar}
                                 alt=""
                             />
