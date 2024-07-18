@@ -1,6 +1,5 @@
-
 import React, {useEffect, useState} from 'react';
-import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
+import {Outlet, Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 import UserList from './components/user/userlist/UserList';
 import DefaultLayout from "./layout/DefaultLayout";
 import "./css/style.css"
@@ -12,6 +11,7 @@ import GetPasswordForm from './components/getpassword/GetPasswordForm';
 import UserDetail from './components/user/userdetail/UserDetail';
 import AccessDenied from "./components/error/AccessDenied";
 import BlogPost from "./components/post/BlogPost";
+import Test from "./components/post/Test";
 import UserProfile from "./components/user/UserProfile/UserProfile";
 import UpdateProfile from "./components/user/UserProfile/UpdateProfile";
 import PostEdit from "./components/PostForm/PostEdit";
@@ -41,6 +41,7 @@ function App() {
     const handleOpenPostForm = () => {
         setShowPostForm(true);
     };
+
 
     const handleClosePostForm = () => {
         setShowPostForm(false);
