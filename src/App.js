@@ -1,4 +1,3 @@
-
 import React, {useEffect, useState} from 'react';
 import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 import UserList from './components/user/userlist/UserList';
@@ -21,6 +20,7 @@ import MyPost from "./components/post/MyPost";
 
 function App() {
     const [loading, setLoading] = useState(true);
+    const [showPostForm, setShowPostForm] = useState(false);
     const { pathname } = useLocation();
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
@@ -36,7 +36,6 @@ function App() {
     }, [pathname]);
 
     useEffect(() => {
-
         setTimeout(() => setLoading(false), 1000);
     }, []);
 
@@ -58,10 +57,11 @@ function App() {
                     <Route path="users" element={<UserList />} />
                     <Route path="user/:id" element={<UserDetail />} />
                 </Route>
-                <Route path="/user" element={<DefaultLayout />}>
+                <Route path="user/" element={<DefaultLayout />}>
                     <Route path="profile/:id" element={<UserProfile />} />
                     <Route path="update/:id" element={<UpdateProfile />} />
                     <Route path=":id" element={<UserDetail />} />
+
                 </Route>
 
                 <Route path={"/changepassword"} element={<ChangePassword />} />
