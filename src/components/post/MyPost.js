@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {Link, useNavigate} from "react-router-dom";
-
+import { Link } from "react-router-dom";
 
 function Post() {
     let [largestPosition, setLargestPosition] = useState(150);
     const [posts, setPosts] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
-    const [hasMore, setHasMore] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
     const pageSize = 5;
     let [searchTerm, setSearchTerm] = useState('h');
-    const [currentPageSearch, setCurrentPageSearch] = useState(0);
     const searchPageSize  = 5;
 
     const loadPosts = async (page, size) => {
@@ -29,9 +27,7 @@ function Post() {
             console.error("Error loading posts:", error);
         }
     };
-    useEffect(() => {
-        handleScroll();
-    }, [currentPage]);
+
     const handleScroll =  () => {
         window.addEventListener('scroll', function() {
             var scrollPosition = window.pageYOffset;
@@ -135,9 +131,11 @@ function Post() {
                         <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
                             {post.description}
                         </p>
+                        <div className="post-detail-main-content"
+                             dangerouslySetInnerHTML={{ __html: post.content }} />
                         <div className="flex items-center">
                             <img
-                                className=" object-cover w-8 h-8 rounded-full"
+                                className="object-cover w-8 h-8 rounded-full"
                                 src={post.userAvatar}
                                 alt=""
                             />

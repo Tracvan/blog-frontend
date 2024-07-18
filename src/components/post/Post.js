@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {Link} from "react-router-dom";
 
@@ -9,10 +9,6 @@ function Post() {
     const [hasMore, setHasMore] = useState(true);
     const pageSize = 5;
     let [searchTerm, setSearchTerm] = useState('h');
-    const [currentPageSearch, setCurrentPageSearch] = useState(0);
-    const searchPageSize = 5;
-    const [searchHasMore, setSearchHasMore ] = useState(false)
-    const [defaultPost, setDefaultPost] = useState([])
 
     const loadPosts = async (page, size) => {
         try {
@@ -27,14 +23,14 @@ function Post() {
     useEffect(() => {
         handleScroll();
     }, []);
-    const handleScroll = () => {
-        window.addEventListener('scroll', function () {
+    const handleScroll =  () => {
+        window.addEventListener('scroll', function() {
             var scrollPosition = window.pageYOffset;
             if (scrollPosition >= largestPosition) {
                 console.log(scrollPosition)
-                setTimeout(() => {
+                setTimeout(()=>{
                     setCurrentPage(prevPage => prevPage + 1)
-                }, 1000)
+                },1000)
                 largestPosition += 200;
                 setLargestPosition(largestPosition);
 
@@ -42,9 +38,11 @@ function Post() {
         });
     };
 
-
+    useEffect(() => {
+        loadPosts(currentPage, pageSize);
+    }, [currentPage]);
     const formatDate = (dateString) => {
-        const options = {day: '2-digit', month: '2-digit', year: 'numeric'};
+        const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
         return new Date(dateString).toLocaleDateString('en-GB', options);
     };
     const handleSearch = async (event) => {
@@ -60,28 +58,24 @@ function Post() {
         try {
             const response = await axios.get(`http://localhost:8080/api/posts/search?input=${searchTerm}`);
             setPosts(response.data)
-            setHasMore(response.data.length === searchPageSize)
+            setHasMore(false)
         } catch (error) {
             console.log('Error fetching search results:', error);
         }
     };
-    useEffect(() => {
-        loadPosts(currentPage, pageSize);
-    }, [currentPage]);
 
     useEffect(() => {
-        if (searchTerm == '') {
-            setPosts([])
-            setCurrentPage(0)
-            loadPosts(0,5)
-            return
+        if (searchTerm === '') {
+            setPosts([]);
+            setCurrentPage(0);
+            loadPosts(0, 5);
+            return;
         }
         handleSearch();
-        return;
     }, [searchTerm]);
     return (
-        <div className="space-y-6 space-x-0 ">
-            <form className="max-w-xl  ml-180" onSubmit={handleSearch}>
+        <div className="space-y-6 space-x-0">
+            <form className="max-w-xl ml-180" onSubmit={handleSearch}>
                 <div className="relative">
                     <button type="submit" className="absolute left-0 top-1/2 -translate-y-1/2">
                         <svg
@@ -131,6 +125,7 @@ function Post() {
                             <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
                                 {post.description}
                             </p>
+                            <div className="post-detail-main-content" dangerouslySetInnerHTML={{ __html: post.content }} />
                             <div className="flex items-center">
                                 <img
                                     className="object-cover w-8 h-8 rounded-full"
@@ -153,8 +148,8 @@ function Post() {
                             />
                         </svg>
                         <span className="absolute w-6 h-5 bottom-2 right-1 text-s text-gray-700 dark:text-gray-300">
-                        {post.commentsDTO.length}
-                    </span>
+                            {post.commentsDTO.length}
+                        </span>
                     </Link>
                 </div>
             ))}
