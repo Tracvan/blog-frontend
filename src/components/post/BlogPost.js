@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import {useNavigate, useParams} from "react-router-dom";
 import {toast, ToastContainer} from "react-toastify";
+import postEdit from "../PostForm/PostEdit";
 
 const BlogPost = () => {
     const { id } = useParams()
@@ -92,6 +93,9 @@ const BlogPost = () => {
             })
         }
     };
+    const editPost = () => {
+        navigate(`/posts/${id}/edit`)
+    }
     const deletePost = async () => {
         const token = localStorage.getItem('token');
         const config = {
@@ -103,7 +107,7 @@ const BlogPost = () => {
             const response = await axios.delete(`http://localhost:8080/api/posts/${id}`, config);
             toast.success('Post deleted successfully');
             setTimeout(() =>{
-                navigate("/users/mypost")
+                navigate("/mypost")
             },1500)
 
         } catch (error) {
@@ -131,7 +135,7 @@ const BlogPost = () => {
                 <ul className="py-2 text-sm text-gray-700 dark:text-gray-200"
                     aria-labelledby="dropdownMenuIconHorizontalButton">
                     <li>
-                        <div
+                        <div onClick={editPost}
                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit post</div>
                     </li>
                     <li>
@@ -183,7 +187,7 @@ const BlogPost = () => {
             <img
                 src={post.image}
                 alt="Blog cover"
-                className="w-full h-64 object-cover rounded-lg mb-6"
+                className="w-full h-auto object-cover rounded-lg mb-6"
             />
             <div className="prose dark:prose-invert max-w-none mb-8">
                 <p>

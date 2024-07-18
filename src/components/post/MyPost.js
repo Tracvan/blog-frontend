@@ -57,10 +57,10 @@ function Post() {
         <div className="space-y-6">
             {posts.map((post) => (
                 <Link key={post.id} to={`/posts/${post.id}`}
-                      className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-3xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 extended-width relative">
+                      className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 extended-width relative">
 
                     <img
-                        className="object-cover w-9 rounded-t-lg h-50 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
+                        className="object-cover w-9 rounded-t-lg max-h-30 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
                         src={post.image}
                         alt=""
                     />
@@ -73,7 +73,7 @@ function Post() {
                         </p>
                         <div className="flex items-center">
                             <img
-                                className="object-cover w-8 h-8 rounded-full"
+                                className=" object-cover w-8 h-8 rounded-full"
                                 src={post.userAvatar}
                                 alt=""
                             />
