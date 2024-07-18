@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Post() {
     let [largestPosition, setLargestPosition] = useState(150);
@@ -22,20 +22,20 @@ function Post() {
             console.error("Error loading posts:", error);
         }
     };
+
     useEffect(() => {
         handleScroll();
     }, []);
-    const handleScroll =  () => {
-        window.addEventListener('scroll', function() {
+
+    const handleScroll = () => {
+        window.addEventListener('scroll', function () {
             var scrollPosition = window.pageYOffset;
             if (scrollPosition >= largestPosition) {
-                console.log(scrollPosition)
-                setTimeout(()=>{
+                setTimeout(() => {
                     setCurrentPage(prevPage => prevPage + 1)
-                },1000)
+                }, 1000);
                 largestPosition += 200;
                 setLargestPosition(largestPosition);
-
             }
         });
     };
@@ -43,10 +43,12 @@ function Post() {
     useEffect(() => {
         loadPosts(currentPage, pageSize);
     }, [currentPage]);
+
     const formatDate = (dateString) => {
         const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
         return new Date(dateString).toLocaleDateString('en-GB', options);
     };
+
     const handleSearch = async (event) => {
         if (event) event.preventDefault();
 
@@ -59,26 +61,25 @@ function Post() {
 
         try {
             const response = await axios.get(`http://localhost:8080/api/posts/search?input=${searchTerm}&page=${currentPageSearch}&size=${searchPageSize}`);
-            setPosts(response.data)
+            setPosts(response.data);
         } catch (error) {
             console.log('Error fetching search results:', error);
         }
     };
 
     useEffect(() => {
-            if (searchTerm == ''){
-                setPosts([])
-                setCurrentPage(0)
-                loadPosts(0,5)
-                return
-            }
-            handleSearch();
-
-
+        if (searchTerm === '') {
+            setPosts([]);
+            setCurrentPage(0);
+            loadPosts(0, 5);
+            return;
+        }
+        handleSearch();
     }, [searchTerm]);
+
     return (
-        <div className="space-y-6 space-x-0 ">
-            <form className="max-w-xl  ml-180" onSubmit={handleSearch}>
+        <div className="space-y-6 space-x-0">
+            <form className="max-w-xl ml-180" onSubmit={handleSearch}>
                 <div className="relative">
                     <button type="submit" className="absolute left-0 top-1/2 -translate-y-1/2">
                         <svg
@@ -104,7 +105,7 @@ function Post() {
                         </svg>
                     </button>
                     <input
-                        style={{border: 0}}
+                        style={{ border: 0 }}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         type="text"
                         placeholder="Type to search..."
@@ -113,9 +114,9 @@ function Post() {
                 </div>
             </form>
             {posts.map((post) => (
-                <div className="space-y-6">
-                    <Link key={post.id} to={`/posts/${post.id}`}
-                          className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row  hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 extended-width relative ">
+                <div className="space-y-6" key={post.id}>
+                    <Link to={`/posts/${post.id}`}
+                          className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 extended-width relative">
                         <img
                             className="object-cover w-9 max-h-30 rounded-t-lg h-50 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
                             src={post.image}
@@ -128,6 +129,7 @@ function Post() {
                             <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
                                 {post.description}
                             </p>
+                            <div className="post-detail-main-content" dangerouslySetInnerHTML={{ __html: post.content }} />
                             <div className="flex items-center">
                                 <img
                                     className="object-cover w-8 h-8 rounded-full"
@@ -150,8 +152,8 @@ function Post() {
                             />
                         </svg>
                         <span className="absolute w-6 h-5 bottom-2 right-1 text-s text-gray-700 dark:text-gray-300">
-                        {post.commentsDTO.length}
-                    </span>
+                            {post.commentsDTO.length}
+                        </span>
                     </Link>
                 </div>
             ))}
