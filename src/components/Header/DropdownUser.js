@@ -8,7 +8,6 @@ const DropdownUser = () => {
     const [currentUser, setCurrentUser] = useState(null)
     const navigate = useNavigate()
     const [dropdownOpen, setDropdownOpen] = useState(false);
-
     useEffect(() => {
         fetchUsers();
     }, []);
@@ -113,7 +112,7 @@ const DropdownUser = () => {
                         </li>
                         <li>
                             <Link
-                                to="#"
+                                to="users/mypost"
                                 className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
                             >
                                 <svg
@@ -129,7 +128,7 @@ const DropdownUser = () => {
                                         fill=""
                                     />
                                 </svg>
-                                My Contacts
+                                My Posts
                             </Link>
                         </li>
                         <li>
