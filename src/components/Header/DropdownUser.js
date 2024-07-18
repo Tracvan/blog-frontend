@@ -8,12 +8,12 @@ const DropdownUser = () => {
     const [currentUser, setCurrentUser] = useState(null)
     const navigate = useNavigate()
     const [dropdownOpen, setDropdownOpen] = useState(false);
+
+
     useEffect(() => {
         fetchUsers();
     }, []);
     const fetchUsers = async () => {
-        let role = localStorage.getItem('authorize')
-
             const token = localStorage.getItem('token');
             const config = {
                 headers: {

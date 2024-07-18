@@ -14,6 +14,16 @@ const Header = (props) => {
     const [totalPages, setTotalPages] = useState(1);
     const usersPerPage = 20;
     const navigate = useNavigate();
+    const [role, setRole] = useState();
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    useEffect(() =>{
+        var userRole = localStorage.getItem("authorize")
+        setRole(userRole);
+        if(role === "ROLE_ADMIN"){
+            setIsAdmin(true);
+        }
+    })
 
     const handleSearch = async (event) => {
         if (event) event.preventDefault();
@@ -132,6 +142,13 @@ const Header = (props) => {
                     {/*        />*/}
                     {/*    </div>*/}
                     {/*</form>*/}
+
+                    {isAdmin && (
+                        <div>
+                        <a href={"/admin/users"} className="mr-20">User Management</a>
+                        <a href={"/admin/posts"} className={"mr-20"}>Post Management</a>
+                        </div>
+                    )}
 
                     {/* Show search results dropdown */}
                     {searchTerm && searchResults.length > 0 && (

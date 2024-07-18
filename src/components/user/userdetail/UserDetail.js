@@ -19,8 +19,14 @@ const UserDetail = () => {
     }, [id]);
 
     const fetchUser = async () => {
+        const token = localStorage.getItem("token")
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        };
         try {
-            const response = await axios.get(`http://localhost:8080/api/user/${id}`);
+            const response = await axios.get(`http://localhost:8080/api/admin/users/${id}`,config);
             setUser(response.data);
         } catch (error) {
             console.error("There was an error fetching the user details!", error);
