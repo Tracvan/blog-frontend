@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Link} from "react-router-dom";
 
@@ -10,7 +10,9 @@ function Post() {
     const pageSize = 5;
     let [searchTerm, setSearchTerm] = useState('h');
     const [currentPageSearch, setCurrentPageSearch] = useState(0);
-    const searchPageSize  = 5;
+    const searchPageSize = 5;
+    const [searchHasMore, setSearchHasMore ] = useState(false)
+    const [defaultPost, setDefaultPost] = useState([])
 
     const loadPosts = async (page, size) => {
         try {
@@ -25,14 +27,14 @@ function Post() {
     useEffect(() => {
         handleScroll();
     }, []);
-    const handleScroll =  () => {
-        window.addEventListener('scroll', function() {
+    const handleScroll = () => {
+        window.addEventListener('scroll', function () {
             var scrollPosition = window.pageYOffset;
             if (scrollPosition >= largestPosition) {
                 console.log(scrollPosition)
-                setTimeout(()=>{
+                setTimeout(() => {
                     setCurrentPage(prevPage => prevPage + 1)
-                },1000)
+                }, 1000)
                 largestPosition += 200;
                 setLargestPosition(largestPosition);
 
@@ -40,11 +42,9 @@ function Post() {
         });
     };
 
-    useEffect(() => {
-        loadPosts(currentPage, pageSize);
-    }, [currentPage]);
+
     const formatDate = (dateString) => {
-        const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+        const options = {day: '2-digit', month: '2-digit', year: 'numeric'};
         return new Date(dateString).toLocaleDateString('en-GB', options);
     };
     const handleSearch = async (event) => {
@@ -58,23 +58,26 @@ function Post() {
         };
 
         try {
-            const response = await axios.get(`http://localhost:8080/api/posts/search?input=${searchTerm}&page=${currentPageSearch}&size=${searchPageSize}`);
+            const response = await axios.get(`http://localhost:8080/api/posts/search?input=${searchTerm}`);
             setPosts(response.data)
+            setHasMore(response.data.length === searchPageSize)
         } catch (error) {
             console.log('Error fetching search results:', error);
         }
     };
+    useEffect(() => {
+        loadPosts(currentPage, pageSize);
+    }, [currentPage]);
 
     useEffect(() => {
-            if (searchTerm == ''){
-                setPosts([])
-                setCurrentPage(0)
-                loadPosts(0,5)
-                return
-            }
-            handleSearch();
-
-
+        if (searchTerm == '') {
+            setPosts([])
+            setCurrentPage(0)
+            loadPosts(0,5)
+            return
+        }
+        handleSearch();
+        return;
     }, [searchTerm]);
     return (
         <div className="space-y-6 space-x-0 ">
