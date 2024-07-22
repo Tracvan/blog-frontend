@@ -8,7 +8,7 @@ function Post() {
     const [currentPage, setCurrentPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
     const pageSize = 5;
-    let [searchTerm, setSearchTerm] = useState('h');
+    let [searchTerm, setSearchTerm] = useState('12312312321321');
     const searchPageSize  = 5;
 
     const loadPosts = async (page, size) => {
@@ -65,14 +65,13 @@ function Post() {
         }
     };
     useEffect(() => {
-        loadPosts(currentPage, pageSize);
+            loadPosts(currentPage, pageSize);
     }, [currentPage]);
 
     useEffect(() => {
         if (searchTerm == '') {
             setPosts([])
             setCurrentPage(0)
-            loadPosts(0,5)
             return
         }
         handleSearch();
