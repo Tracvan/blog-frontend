@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
 function Post() {
     let [largestPosition, setLargestPosition] = useState(150);
@@ -8,13 +8,17 @@ function Post() {
     const [currentPage, setCurrentPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
     const pageSize = 5;
-    let [searchTerm, setSearchTerm] = useState('h');
-    const [currentPageSearch, setCurrentPageSearch] = useState(0);
-    const searchPageSize  = 5;
+    let [searchTerm, setSearchTerm] = useState('test');
 
     const loadPosts = async (page, size) => {
+        const token = localStorage.getItem('token');
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        };
         try {
-            const response = await axios.get(`http://localhost:8080/api/posts/public?page=${currentPage}&size=${pageSize}`);
+            const response = await axios.get(`http://localhost:8080/api/posts/public?page=${currentPage}&size=${pageSize}`,config);
             const data = response.data;
             setPosts(prev => [...prev, ...data]);
             setHasMore(data.length === size);
@@ -22,33 +26,61 @@ function Post() {
             console.error("Error loading posts:", error);
         }
     };
-
     useEffect(() => {
         handleScroll();
     }, []);
-
-    const handleScroll = () => {
-        window.addEventListener('scroll', function () {
+    const handleScroll =  () => {
+        window.addEventListener('scroll', function() {
             var scrollPosition = window.pageYOffset;
             if (scrollPosition >= largestPosition) {
-                setTimeout(() => {
+                console.log(scrollPosition)
+                setTimeout(()=>{
                     setCurrentPage(prevPage => prevPage + 1)
-                }, 1000);
+                },1000)
                 largestPosition += 200;
                 setLargestPosition(largestPosition);
+
             }
         });
     };
+    const handleLike = async (postId) =>{
+        const newSize = (currentPage + 1) * 5
+        const token = localStorage.getItem('token');
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        };
+        try {
+            const response = await axios.post(`http://localhost:8080/api/react/like?postId=${postId}&size=${newSize}`,null,config);
+            const data = response.data;
+            setPosts(prevState => data)
+        } catch (error) {
+            console.error("Error loading posts:", error);
+        }
+    }
+    const handleUnlike = async (postId) =>{
+        const newSize = (currentPage + 1) * 5
+        const token = localStorage.getItem('token');
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        };
+        try {
+            const response = await axios.delete(`http://localhost:8080/api/react/like?postId=${postId}&size=${newSize}`,config);
+            const data = response.data
+            setPosts(prevState => data)
+        } catch (error) {
+            console.error("Error loading posts:", error);
+        }
+    }
 
-    useEffect(() => {
-        loadPosts(currentPage, pageSize);
-    }, [currentPage]);
 
     const formatDate = (dateString) => {
         const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
         return new Date(dateString).toLocaleDateString('en-GB', options);
     };
-
     const handleSearch = async (event) => {
         if (event) event.preventDefault();
 
@@ -60,23 +92,28 @@ function Post() {
         };
 
         try {
-            const response = await axios.get(`http://localhost:8080/api/posts/search?input=${searchTerm}&page=${currentPageSearch}&size=${searchPageSize}`);
-            setPosts(response.data);
+            const response = await axios.get(`http://localhost:8080/api/posts/search?input=${searchTerm}`);
+            setPosts(response.data)
+
+            setHasMore(false)
         } catch (error) {
             console.log('Error fetching search results:', error);
         }
     };
 
+
     useEffect(() => {
         if (searchTerm === '') {
             setPosts([]);
             setCurrentPage(0);
-            loadPosts(0, 5);
             return;
         }
         handleSearch();
     }, [searchTerm]);
-
+    useEffect(() => {
+            loadPosts(currentPage, pageSize);
+    }, [currentPage]);
+    console.log(posts)
     return (
         <div className="space-y-6 space-x-0">
             <form className="max-w-xl ml-180" onSubmit={handleSearch}>
@@ -105,7 +142,7 @@ function Post() {
                         </svg>
                     </button>
                     <input
-                        style={{ border: 0 }}
+                        style={{border: 0}}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         type="text"
                         placeholder="Type to search..."
@@ -113,23 +150,27 @@ function Post() {
                     />
                 </div>
             </form>
-            {posts.map((post) => (
-                <div className="space-y-6" key={post.id}>
-                    <Link to={`/posts/${post.id}`}
-                          className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 extended-width relative">
-                        <img
-                            className="object-cover w-9 max-h-30 rounded-t-lg h-50 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
-                            src={post.image}
-                            alt=""
-                        />
-                        <div className="flex flex-col justify-between p-4 leading-normal">
-                            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                                {post.title}
-                            </h5>
-                            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                                {post.description}
-                            </p>
-                            <div className="post-detail-main-content" dangerouslySetInnerHTML={{ __html: post.content }} />
+                <div className="space-y-6">
+                    {posts.map(post => (
+                        <div key={post.id}
+                             className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 extended-width relative">
+                            <img
+                                className="object-cover w-9 max-h-30 rounded-t-lg h-50 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
+                                src={post.image}
+                                alt=""
+                            />
+                            <div className="flex flex-col justify-between p-4 leading-normal">
+                                <Link to={`/posts/${post.id}`} className="hover:underline">
+                                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                        {post.title}
+                                    </h5>
+                                </Link>
+                                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                                    {post.description}
+                                </p>
+                                <div className="post-detail-main-content"
+                                     dangerouslySetInnerHTML={{__html: post.content}}/>
+                            </div>
                             <div className="flex items-center">
                                 <img
                                     className="object-cover w-8 h-8 rounded-full"
@@ -137,26 +178,42 @@ function Post() {
                                     alt=""
                                 />
                                 <span className="ml-3 text-md text-gray-600 dark:text-gray-400">{post.username}</span>
+                                {post.isReacted &&
+                                    <div onClick={ () => handleUnlike(post.id)}>
+                                        <svg className="h-8 w-8 text-blue-500" width="24" height="24"
+                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                             stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z"/>
+                                            <path
+                                                d="M7 11v 8a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-7a1 1 0 0 1 1 -1h3a4 4 0 0 0 4 -4v-1a2 2 0 0 1 4 0v5h3a2 2 0 0 1 2 2l-1 5a2 3 0 0 1 -2 2h-7a3 3 0 0 1 -3 -3"/>
+                                        </svg>
+                                    </div>
+                                }
+                                {!post.isReacted &&
+                                    <div onClick={ () => handleLike(post.id)}>
+                                        <svg className="h-8 w-8 text-gray-500" width="24" height="24"
+                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                             stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z"/>
+                                            <path
+                                                d="M7 11v 8a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-7a1 1 0 0 1 1 -1h3a4 4 0 0 0 4 -4v-1a2 2 0 0 1 4 0v5h3a2 2 0 0 1 2 2l-1 5a2 3 0 0 1 -2 2h-7a3 3 0 0 1 -3 -3"/>
+                                        </svg>
+                                    </div>
+                                }
                             </div>
+                            <span
+                                className="absolute bottom-2 right-13 text-sm text-gray-500 dark:text-gray-400">{formatDate(post.time)}</span>
+                            <svg className="absolute w-6 h-5 bottom-2 right-6 text-gray-700 dark:text-gray-300"
+                                 viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M3,6v9c0,1.105,0.895,2,2,2h9v5l5.325-3.804C20.376,17.446,21,16.233,21,14.942V6c0-1.105-0.895-2-2-2H5C3.895,4,3,4.895,3,6z"/>
+                            </svg>
+                            <span className="absolute w-6 h-5 bottom-2 right-1 text-s text-gray-700 dark:text-gray-300">
+                {post.commentsDTO.length}
+            </span>
                         </div>
-                        <span
-                            className="absolute bottom-2 right-13 text-sm text-gray-500 dark:text-gray-400">{formatDate(post.time)}</span>
-                        <svg
-                            className="absolute w-6 h-5 bottom-2 right-6 text-gray-700 dark:text-gray-300"
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                                d="M3,6v9c0,1.105,0.895,2,2,2h9v5l5.325-3.804C20.376,17.446,21,16.233,21,14.942V6c0-1.105-0.895-2-2-2H5C3.895,4,3,4.895,3,6z"
-                            />
-                        </svg>
-                        <span className="absolute w-6 h-5 bottom-2 right-1 text-s text-gray-700 dark:text-gray-300">
-                            {post.commentsDTO.length}
-                        </span>
-                    </Link>
+                    ))}
                 </div>
-            ))}
             {hasMore && (
                 <button
                     id="load-more" onClick={() => setCurrentPage(prevPage => prevPage + 1)}>Load More</button>

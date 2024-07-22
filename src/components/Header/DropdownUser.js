@@ -8,12 +8,12 @@ const DropdownUser = () => {
     const [currentUser, setCurrentUser] = useState(null)
     const navigate = useNavigate()
     const [dropdownOpen, setDropdownOpen] = useState(false);
+
+
     useEffect(() => {
         fetchUsers();
     }, []);
     const fetchUsers = async () => {
-        let role = localStorage.getItem('authorize')
-
             const token = localStorage.getItem('token');
             const config = {
                 headers: {
@@ -112,7 +112,7 @@ const DropdownUser = () => {
                         </li>
                         <li>
                             <Link
-                                to="users/mypost"
+                                to="mypost"
                                 className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
                             >
                                 <svg

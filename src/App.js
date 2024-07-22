@@ -16,20 +16,16 @@ import UpdateProfile from "./components/user/UserProfile/UpdateProfile";
 import PostEdit from "./components/PostForm/PostEdit";
 import PostForm from "./components/PostForm/PostForm";
 import MyPost from "./components/post/MyPost";
+import AdminPost from "./components/post/AdminPost";
+import AdminBlogPost from "./components/post/AdminBlogPost";
 
 
 function App() {
     const [loading, setLoading] = useState(true);
     const [showPostForm, setShowPostForm] = useState(false);
     const { pathname } = useLocation();
-    const token = localStorage.getItem('token');
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (token === null) {
-            navigate('/login');
-        }
-    }, [navigate, token]);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -45,10 +41,8 @@ function App() {
         return <div>Loading...</div>; // Or your loading spinner
     }
 
-
     return (
         <>
-
             <Routes>
                 <Route path={"/login"} element={<LoginForm/>}/>
                 <Route path="/register" element={<RegisterForm />} />
@@ -56,6 +50,8 @@ function App() {
                 <Route path={"/admin"} element={<DefaultLayout/>}>
                     <Route path="users" element={<UserList />} />
                     <Route path="user/:id" element={<UserDetail />} />
+                    <Route path="posts" element={<AdminPost />} />
+                    <Route path={"posts/:id"} element={<AdminBlogPost/>}/>
                 </Route>
                 <Route path="user/" element={<DefaultLayout />}>
                     <Route path="profile/:id" element={<UserProfile />} />
