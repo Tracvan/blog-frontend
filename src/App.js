@@ -57,10 +57,11 @@ function App() {
                     <Route path="profile/:id" element={<UserProfile />} />
                     <Route path="update/:id" element={<UpdateProfile />} />
                     <Route path=":id" element={<UserDetail />} />
+                    <Route path={"changepassword"} element={<ChangePassword />} />
 
                 </Route>
 
-                <Route path={"/changepassword"} element={<ChangePassword />} />
+
                 <Route path={"/getpassword"} element={<GetPasswordForm />} />
                 <Route path={"/access-denined"} element={<AccessDenied />} />
 

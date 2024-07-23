@@ -7,7 +7,7 @@ function Post() {
     const [posts, setPosts] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
-    const pageSize = 5;
+    const pageSize = 6;
     let [searchTerm, setSearchTerm] = useState('test');
 
     const loadPosts = async (page, size) => {
@@ -44,7 +44,7 @@ function Post() {
         });
     };
     const handleLike = async (postId) =>{
-        const newSize = (currentPage + 1) * 5
+        const newSize = (currentPage + 1) * pageSize
         const token = localStorage.getItem('token');
         const config = {
             headers: {
@@ -54,13 +54,13 @@ function Post() {
         try {
             const response = await axios.post(`http://localhost:8080/api/react/like?postId=${postId}&size=${newSize}`,null,config);
             const data = response.data;
-            setPosts(prevState => data)
+            setPosts(data)
         } catch (error) {
             console.error("Error loading posts:", error);
         }
     }
     const handleUnlike = async (postId) =>{
-        const newSize = (currentPage + 1) * 5
+        const newSize = (currentPage + 1) * pageSize
         const token = localStorage.getItem('token');
         const config = {
             headers: {
@@ -150,72 +150,79 @@ function Post() {
                     />
                 </div>
             </form>
-                <div className="space-y-6">
+            <div className="space-y-6 space-x-0">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {posts.map(post => (
                         <div key={post.id}
-                             className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 extended-width relative">
+                             className="flex flex-col bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
                             <img
-                                className="object-cover w-9 max-h-30 rounded-t-lg h-50 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
+                                className="object-cover w-full h-48 rounded-t-lg md:h-56"
                                 src={post.image}
                                 alt=""
                             />
                             <div className="flex flex-col justify-between p-4 leading-normal">
-                                <Link to={`/posts/${post.id}`} className="hover:underline">
+                                <a href={`/posts/${post.id}`} className="hover:underline">
                                     <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                                         {post.title}
                                     </h5>
-                                </Link>
+                                </a>
                                 <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
                                     {post.description}
                                 </p>
-                                <div className="post-detail-main-content"
-                                     dangerouslySetInnerHTML={{__html: post.content}}/>
-                            </div>
-                            <div className="flex items-center">
-                                <img
-                                    className="object-cover w-8 h-8 rounded-full"
-                                    src={post.userAvatar}
-                                    alt=""
-                                />
-                                <span className="ml-3 text-md text-gray-600 dark:text-gray-400">{post.username}</span>
-                                {post.isReacted &&
-                                    <div onClick={ () => handleUnlike(post.id)}>
-                                        <svg className="h-8 w-8 text-blue-500" width="24" height="24"
-                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                             stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z"/>
+                                <div className="post-detail-main-content mb-3"
+                                     dangerouslySetInnerHTML={{__html: post.content}}></div>
+                                <div className="flex items-center mb-3">
+                                    <img
+                                        className="object-cover w-8 h-8 rounded-full"
+                                        src={post.userAvatar}
+                                        alt=""
+                                    />
+                                    <span className="ml-3 text-md text-gray-600 dark:text-gray-400">{post.username}</span>
+                                    {post.isReacted ? (
+                                        <div onClick={() => handleUnlike(post.id)}
+                                             className="ml-3 flex items-center cursor-pointer">
+                                            <svg className="h-6 w-6 text-blue-500" width="24" height="24"
+                                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                                 stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z"/>
+                                                <path
+                                                    d="M7 11v8a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-7a1 1 0 0 1 1 -1h3a4 4 0 0 0 4 -4v-1a2 2 0 0 1 4 0v5h3a2 2 0 0 1 2 2l-1 5a2 3 0 0 1 -2 2h-7a3 3 0 0 1 -3 -3"/>
+                                            </svg>
+                                            <span className="ml-1">{post.reactQuantity}</span>
+                                        </div>
+                                    ) : (
+                                        <div onClick={() => handleLike(post.id)}
+                                             className="ml-3 flex items-center cursor-pointer">
+                                            <svg className="h-6 w-6 text-gray-500" width="24" height="24"
+                                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                                 stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z"/>
+                                                <path
+                                                    d="M7 11v8a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-7a1 1 0 0 1 1 -1h3a4 4 0 0 0 4 -4v-1a2 2 0 0 1 4 0v5h3a2 2 0 0 1 2 2l-1 5a2 3 0 0 1 -2 2h-7a3 3 0 0 1 -3 -3"/>
+                                            </svg>
+                                            <span className="ml-1">{post.reactQuantity}</span>
+                                        </div>
+                                    )}
+                                </div>
+                                <div
+                                    className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+                                    <span>{formatDate(post.time)}</span>
+                                    <div className="flex items-center">
+                                        <svg className="w-5 h-5 mr-1 text-gray-700 dark:text-gray-300"
+                                             viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                             <path
-                                                d="M7 11v 8a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-7a1 1 0 0 1 1 -1h3a4 4 0 0 0 4 -4v-1a2 2 0 0 1 4 0v5h3a2 2 0 0 1 2 2l-1 5a2 3 0 0 1 -2 2h-7a3 3 0 0 1 -3 -3"/>
+                                                d="M3,6v9c0,1.105,0.895,2,2,2h9v5l5.325-3.804C20.376,17.446,21,16.233,21,14.942V6c0-1.105-0.895-2-2-2H5C3.895,4,3,4.895,3,6z"/>
                                         </svg>
+                                        <span>{post.commentsDTO.length}</span>
                                     </div>
-                                }
-                                {!post.isReacted &&
-                                    <div onClick={ () => handleLike(post.id)}>
-                                        <svg className="h-8 w-8 text-gray-500" width="24" height="24"
-                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                             stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z"/>
-                                            <path
-                                                d="M7 11v 8a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-7a1 1 0 0 1 1 -1h3a4 4 0 0 0 4 -4v-1a2 2 0 0 1 4 0v5h3a2 2 0 0 1 2 2l-1 5a2 3 0 0 1 -2 2h-7a3 3 0 0 1 -3 -3"/>
-                                        </svg>
-                                    </div>
-                                }
+                                </div>
                             </div>
-                            <span
-                                className="absolute bottom-2 right-13 text-sm text-gray-500 dark:text-gray-400">{formatDate(post.time)}</span>
-                            <svg className="absolute w-6 h-5 bottom-2 right-6 text-gray-700 dark:text-gray-300"
-                                 viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M3,6v9c0,1.105,0.895,2,2,2h9v5l5.325-3.804C20.376,17.446,21,16.233,21,14.942V6c0-1.105-0.895-2-2-2H5C3.895,4,3,4.895,3,6z"/>
-                            </svg>
-                            <span className="absolute w-6 h-5 bottom-2 right-1 text-s text-gray-700 dark:text-gray-300">
-                {post.commentsDTO.length}
-            </span>
                         </div>
                     ))}
                 </div>
+            </div>
             {hasMore && (
-                <button
+                <button className="ml-100"
                     id="load-more" onClick={() => setCurrentPage(prevPage => prevPage + 1)}>Load More</button>
             )}
         </div>
