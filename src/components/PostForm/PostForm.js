@@ -306,6 +306,7 @@ const PostForm = ({ handleClose }) => {
                                             }}
                                             onChange={(event, editor) => {
                                                 setContent(editor.getData());
+                                                console.log(editor.getData());
                                             }}
                                         />
                                     </div>
