@@ -14,14 +14,11 @@ const Header = (props) => {
     const [totalPages, setTotalPages] = useState(1);
     const usersPerPage = 20;
     const navigate = useNavigate();
-    const [role, setRole] = useState();
     const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() =>{
         var userRole = localStorage.getItem("authorize")
-        setRole(userRole);
-        console.log(role)
-        if(role === "ROLE_ADMIN"){
+        if(userRole === "ROLE_ADMIN"){
             setIsAdmin(true);
         }
     },[])
