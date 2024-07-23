@@ -14,6 +14,7 @@ const BlogPost = () => {
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
     const [isOwnPost, setIsOwnPost] = useState(true);
+    const [currentPage, setCurrentPage] = useState(0);
 
     const dropDownMenu = () => {
         setIsOpen(!isOpen);
@@ -22,7 +23,6 @@ const BlogPost = () => {
     useEffect(() => {
         fetchPosts();
     }, [id]);
-
     const fetchPosts = async () => {
         const token = localStorage.getItem('token');
         const config = {
@@ -70,8 +70,13 @@ const BlogPost = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const token = localStorage.getItem('token');
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        };
         try {
-            const response = await axios.post('http://localhost:8080/api/comments', {
+            const post = await axios.post('http://localhost:8080/api/comments', {
                 content: formData.content,
                 post_id: id
             }, {
@@ -84,6 +89,8 @@ const BlogPost = () => {
                 content: '',
                 post_id: id,
             });
+            const response = await axios.get(`http://localhost:8080/api/posts/${id}`, config);
+            setPost(response.data);
         } catch (error) {
             console.log(error);
         }

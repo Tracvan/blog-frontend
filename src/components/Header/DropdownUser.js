@@ -112,7 +112,7 @@ const DropdownUser = () => {
                         </li>
                         <li>
                             <Link
-                                to="mypost"
+                                to="/mypost"
                                 className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
                             >
                                 <svg
@@ -133,7 +133,7 @@ const DropdownUser = () => {
                         </li>
                         <li>
                             <Link
-                                to="/changepassword"
+                                to="user/changepassword"
                                 className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
                             >
                                 <svg
