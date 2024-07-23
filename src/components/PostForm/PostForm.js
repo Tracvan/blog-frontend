@@ -189,6 +189,18 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "./Firebase"; // Adjust the path to your Firebase configuration
 import { v4 } from "uuid";
 import { useNavigate } from "react-router-dom";
+import {GlobalStyles} from "@mui/material";
+
+
+const inputGlobalStyles = (
+    <GlobalStyles
+        styles={{
+            ".ck.ck-balloon-panel": {
+                zIndex: "9999 !important", // Put a higher value that your MUI Dialog (generaly 1300)
+            },
+        }}
+    />
+);
 
 const PostForm = ({ handleClose }) => {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -285,6 +297,7 @@ const PostForm = ({ handleClose }) => {
                                 <div className="col-span-2">
                                     <label className="block text-sm font-medium text-gray-900 dark:text-white">Content</label>
                                     <div className="max-h-96 overflow-y-auto">
+                                        {inputGlobalStyles}
                                         <CKEditor
                                             editor={Editor}
                                             data="<p>Enter your content here</p>"
@@ -293,6 +306,7 @@ const PostForm = ({ handleClose }) => {
                                             }}
                                             onChange={(event, editor) => {
                                                 setContent(editor.getData());
+                                                console.log(editor.getData());
                                             }}
                                         />
                                     </div>
