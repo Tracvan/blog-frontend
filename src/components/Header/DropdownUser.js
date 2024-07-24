@@ -8,12 +8,12 @@ const DropdownUser = () => {
     const [currentUser, setCurrentUser] = useState(null)
     const navigate = useNavigate()
     const [dropdownOpen, setDropdownOpen] = useState(false);
+
+
     useEffect(() => {
         fetchUsers();
     }, []);
     const fetchUsers = async () => {
-        let role = localStorage.getItem('authorize')
-
             const token = localStorage.getItem('token');
             const config = {
                 headers: {
@@ -21,8 +21,10 @@ const DropdownUser = () => {
                 }
             };
             try {
+                if(token!=null){
                 const response = await axios.get('http://localhost:8080/api/currentUser', config);
                 setCurrentUser(response.data);
+                }
             } catch (error) {
                 console.log(error)
             }
@@ -78,8 +80,6 @@ const DropdownUser = () => {
                     />
                 </svg>
             </Link>
-
-            {/* <!-- Dropdown Start --> */}
             {dropdownOpen && (
                 <div
                     className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark`}
@@ -112,7 +112,7 @@ const DropdownUser = () => {
                         </li>
                         <li>
                             <Link
-                                to="users/mypost"
+                                to="/mypost"
                                 className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
                             >
                                 <svg
@@ -133,7 +133,7 @@ const DropdownUser = () => {
                         </li>
                         <li>
                             <Link
-                                to="/changepassword"
+                                to="user/changepassword"
                                 className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
                             >
                                 <svg

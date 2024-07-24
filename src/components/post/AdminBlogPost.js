@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
-const BlogPost = () => {
+const AdminBlogPost = () => {
     const { id } = useParams();
     const [post, setPost] = useState({});
     const [formData, setFormData] = useState({
@@ -14,7 +14,6 @@ const BlogPost = () => {
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
     const [isOwnPost, setIsOwnPost] = useState(true);
-    const [currentPage, setCurrentPage] = useState(0);
 
     const dropDownMenu = () => {
         setIsOpen(!isOpen);
@@ -23,6 +22,7 @@ const BlogPost = () => {
     useEffect(() => {
         fetchPosts();
     }, [id]);
+
     const fetchPosts = async () => {
         const token = localStorage.getItem('token');
         const config = {
@@ -31,25 +31,12 @@ const BlogPost = () => {
             }
         };
         try {
-            const response = await axios.get(`http://localhost:8080/api/posts/${id}`, config);
+            const response = await axios.get(`http://localhost:8080/api/admin/posts/${id}`, config);
             setPost(response.data);
         } catch (error) {
             console.log(error);
         }
     };
-
-    const checkOwner = () => {
-        if (post.isOwner) {
-            setIsOwnPost(true);
-        } else {
-            setIsOwnPost(false);
-        }
-    };
-
-    useEffect(() => {
-        checkOwner();
-    }, [post]);
-
     const formatDate = (dateString) => {
         const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
         return new Date(dateString).toLocaleDateString('en-GB', options);
@@ -70,13 +57,8 @@ const BlogPost = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const token = localStorage.getItem('token');
-        const config = {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        };
         try {
-            const post = await axios.post('http://localhost:8080/api/comments', {
+            const response = await axios.post('http://localhost:8080/api/comments', {
                 content: formData.content,
                 post_id: id
             }, {
@@ -89,8 +71,6 @@ const BlogPost = () => {
                 content: '',
                 post_id: id,
             });
-            const response = await axios.get(`http://localhost:8080/api/posts/${id}`, config);
-            setPost(response.data);
         } catch (error) {
             console.log(error);
         }
@@ -108,11 +88,12 @@ const BlogPost = () => {
             }
         };
         try {
-            const response = await axios.delete(`http://localhost:8080/api/posts/${id}`, config);
+            toast("Post is being deleted, please wait for a minute")
+            const response = await axios.delete(`http://localhost:8080/api/admin/posts/${id}`, config);
             toast.success('Post deleted successfully');
             setTimeout(() => {
-                navigate("/mypost");
-            }, 1500);
+                navigate("/admin/posts");
+            }, 500);
         } catch (error) {
             console.log(error);
         }
@@ -121,7 +102,6 @@ const BlogPost = () => {
     return (
         <div className="mx-auto relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
             <ToastContainer />
-            {isOwnPost && (
                 <button onClick={dropDownMenu} id="dropdownMenuIconHorizontalButton"
                         data-dropdown-toggle="dropdownDotsHorizontal"
                         className="absolute right-4 inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
@@ -132,16 +112,11 @@ const BlogPost = () => {
                             d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z" />
                     </svg>
                 </button>
-            )}
             <div
                 id="dropdownDotsHorizontal"
                 className={`z-10 ${isOpen ? "" : "hidden"} z-40 absolute right-14 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600 ml-171.5`}>
                 <ul className="py-2 text-sm text-gray-700 dark:text-gray-200"
                     aria-labelledby="dropdownMenuIconHorizontalButton">
-                    <li>
-                        <div onClick={editPost}
-                             className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit post</div>
-                    </li>
                     <li>
                         <div onClick={() => setIsModalOpen(true)}
                              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Delete post</div>
@@ -231,4 +206,4 @@ const BlogPost = () => {
     );
 };
 
-export default BlogPost;
+export default AdminBlogPost;
