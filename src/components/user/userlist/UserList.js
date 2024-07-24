@@ -136,7 +136,7 @@ const UserList = () => {
                                         <p className="text-gray-100 whitespace-no-wrap">{user.fullName}</p>
                                     </td>
                                     <td className="px-5 py-5 border-b border-gray-200 bg-transparent text-sm">
-                                        <p className={`text-gray-100 whitespace-no-wrap ${user.status === 'locked' ? 'text-red-600' : 'text-green-600'}`}>
+                                        <p className={`text-gray-100 whitespace-no-wrap ${user.status === 'Lock' ? 'text-red-600' : 'text-green-600'}`}>
                                             {user.status}
                                         </p>
                                     </td>
