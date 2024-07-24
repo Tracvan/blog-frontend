@@ -107,8 +107,8 @@ const Header = (props) => {
                 <div className="hidden sm:block">
                     {isAdmin && (
                         <div>
-                        <a href={"/admin/users"} className="mr-20">User Management</a>
-                        <a href={"/admin/posts"} className={"mr-20"}>Post Management</a>
+                        <Link to={`/admin/users`} className="mr-20">User Management</Link>
+                        <Link to={`/admin/posts`} className={"mr-20"}>Post Management</Link>
                         </div>
                     )}
 

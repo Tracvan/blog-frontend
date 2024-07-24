@@ -166,11 +166,11 @@ function Post() {
                                 alt=""
                             />
                             <div className="flex flex-col justify-between p-4 leading-normal">
-                                <a href={`/posts/${post.id}`} className="hover:underline min-h-20 max-l">
+                                <Link to={`/posts/${post.id}`} className="hover:underline min-h-20 max-l">
                                     <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                                         {truncateText(post.title, 50)}
                                     </h5>
-                                </a>
+                                </Link>
                                 <p className="min-h-10 max-h-10 mb-3 font-normal text-gray-700 dark:text-gray-400">
                                     {truncateText(post.description, 60)}
                                 </p>

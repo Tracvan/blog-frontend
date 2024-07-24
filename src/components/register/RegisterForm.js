@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './RegisterForm.css';
 import axios from 'axios';
 
-import { useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 function RegisterForm() {
     const navigate = useNavigate();
@@ -132,7 +132,7 @@ function RegisterForm() {
                     <button type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Create account</button>
                 </form>
                 {message && <p className="mt-4 text-center text-gray-600">{message}</p>}
-                <p className="mt-4 text-center text-gray-600">Already have an account? <a href="/login" className="text-blue-600 hover:underline">Login here.</a></p>
+                <p className="mt-4 text-center text-gray-600">Already have an account? <Link to={`/login`} className="text-blue-600 hover:underline">Login here.</Link></p>
             </div>
         </div>
     );
