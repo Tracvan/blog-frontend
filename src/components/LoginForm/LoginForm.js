@@ -93,13 +93,13 @@ const LoginForm = () => {
                         in
                     </button>
 
-                    <a href="http://localhost:3000/getpassword"
-                       className="block mt-4 text-center text-blue-600 hover:underline">Forgot password?</a>
+                    <Link to={`/getpassword`}
+                       className="block mt-4 text-center text-blue-600 hover:underline">Forgot password?</Link>
 
                 </form>
 
-                <p className="mt-4 text-center text-gray-600">Register to an existing account? <a href="/register" className="text-blue-600 hover:underline">Register
-                    here.</a></p>
+                <p className="mt-4 text-center text-gray-600">Register to an existing account? <Link to={`/register`} className="text-blue-600 hover:underline">Register
+                    here.</Link></p>
                 <div className="social-login">
                     <button onClick={onSignIn} className="btn-social" >
                         <img src="https://getnet.mx/media/popup/CHROME.png" alt="Google logo"/>
@@ -118,9 +118,9 @@ const LoginForm = () => {
 
 
                 {error && <p className="mt-4 text-center text-red-600">{error}</p>}
-                <p className="mt-4 text-center text-gray-600">Register to an existing account? <a href="/register"
+                <p className="mt-4 text-center text-gray-600">Register to an existing account? <Link to={`/register`}
                                                                                                   className="text-blue-600 hover:underline">Register
-                    here.</a></p>
+                    here.</Link></p>
             </div>
         </div>
     );
