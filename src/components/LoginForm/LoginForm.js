@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import './LoginForm.css';
 import axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
-import GetPasswordForm from "../getpassword/GetPasswordForm";
 const LoginForm = () => {
     const navigate = useNavigate();
-
+    const [accountStatus, setAccountStatus] = useState(true)
     const [formData, setFormData] = useState({
         usernameOrEmail: '',
         password: ''
@@ -29,14 +28,20 @@ const LoginForm = () => {
                 "usernameOrEmail": formData.usernameOrEmail,
                 "password": formData.password
             });
-            console.log('Login successful', response.data);
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('authorize', response.data.authorize)
-            if(localStorage.getItem('authorize') === "ROLE_ADMIN"){
-            navigate('/admin/users')
+            const status = response.data.message
+            if(status !== "Active"){
+                alert("Your account is being locked, Please contact to admin for detail")
+                navigate("/login")
             }else {
-                navigate('/posts')
-            };
+                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('authorize', response.data.authorize)
+                if (localStorage.getItem('authorize') === "ROLE_ADMIN") {
+                    navigate('/admin/users')
+                } else {
+                    navigate('/posts')
+                }
+                ;
+            }
         } catch (error) {
             setError('Login failed. Please check your credentials.');
         }

@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import {useNavigate, useParams} from "react-router-dom";
+import {toast, ToastContainer} from "react-toastify";
 
 const BlogPost = () => {
-    const { id } = useParams();
+    const {id} = useParams();
     const [post, setPost] = useState({});
     const [formData, setFormData] = useState({
         content: '',
-        post_id: { id }
+        post_id: {id}
     });
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
     const [isOwnPost, setIsOwnPost] = useState(true);
     const [currentPage, setCurrentPage] = useState(0);
+    const [goToComment, setGoToComment] = useState(false);
 
     const dropDownMenu = () => {
         setIsOpen(!isOpen);
@@ -51,7 +52,7 @@ const BlogPost = () => {
     }, [post]);
 
     const formatDate = (dateString) => {
-        const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+        const options = {day: '2-digit', month: '2-digit', year: 'numeric'};
         return new Date(dateString).toLocaleDateString('en-GB', options);
     };
 
@@ -60,7 +61,7 @@ const BlogPost = () => {
     }
 
     const handleChange = (event) => {
-        const { name, value } = event.target;
+        const {name, value} = event.target;
         setFormData(prevState => ({
             ...prevState,
             [name]: value
@@ -120,7 +121,7 @@ const BlogPost = () => {
 
     return (
         <div className="mx-auto relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
-            <ToastContainer />
+            <ToastContainer/>
             {isOwnPost && (
                 <button onClick={dropDownMenu} id="dropdownMenuIconHorizontalButton"
                         data-dropdown-toggle="dropdownDotsHorizontal"
@@ -129,7 +130,7 @@ const BlogPost = () => {
                     <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                          fill="currentColor" viewBox="0 0 16 3">
                         <path
-                            d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z" />
+                            d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/>
                     </svg>
                 </button>
             )}
@@ -140,32 +141,50 @@ const BlogPost = () => {
                     aria-labelledby="dropdownMenuIconHorizontalButton">
                     <li>
                         <div onClick={editPost}
-                             className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit post</div>
+                             className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit
+                            post
+                        </div>
                     </li>
                     <li>
                         <div onClick={() => setIsModalOpen(true)}
-                             className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Delete post</div>
+                             className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Delete
+                            post
+                        </div>
                     </li>
                 </ul>
                 {isModalOpen && (
-                    <div id="popup-modal" tabIndex="-1" className="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-full bg-black bg-opacity-50">
+                    <div id="popup-modal" tabIndex="-1"
+                         className="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-full bg-black bg-opacity-50">
                         <div className="relative p-4 w-full max-w-md max-h-full">
                             <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                                <button type="button" className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => setIsModalOpen(false)}>
-                                    <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                <button type="button"
+                                        className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                        onClick={() => setIsModalOpen(false)}>
+                                    <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                         fill="none" viewBox="0 0 14 14">
+                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
+                                              strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                                     </svg>
                                     <span className="sr-only">Close modal</span>
                                 </button>
                                 <div className="p-4 md:p-5 text-center">
-                                    <svg className="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    <svg className="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200"
+                                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                         viewBox="0 0 20 20">
+                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
+                                              strokeWidth="2"
+                                              d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                     </svg>
-                                    <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete this post?</h3>
-                                    <button onClick={deletePost} type="button" className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                                    <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you
+                                        sure you want to delete this post?</h3>
+                                    <button onClick={deletePost} type="button"
+                                            className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
                                         Yes, I'm sure
                                     </button>
-                                    <button onClick={() => setIsModalOpen(false)} type="button" className="py-2.5 px-5 ml-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">No, cancel</button>
+                                    <button onClick={() => setIsModalOpen(false)} type="button"
+                                            className="py-2.5 px-5 ml-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">No,
+                                        cancel
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -187,35 +206,37 @@ const BlogPost = () => {
                     <p className="text-sm text-gray-500 dark:text-gray-400"> {formatDate(post.time)}</p>
                 </div>
             </div>
-            <img
-                src={post.image}
-                alt="Blog cover"
-                className="w-full h-auto object-cover rounded-lg mb-6"
-            />
-            <div className="prose dark:prose-invert max-w-none mb-8">
-                <div dangerouslySetInnerHTML={{ __html: post.content }} />
-            </div>
-            <div>
-                <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Comments</h2>
-                {post.commentsDTO?.map((comment) =>
-                    <div key={comment.id} className="space-y-4 mt-3">
-                        <div className="flex space-x-4">
-                            <img
-                                src={comment.userAvatar}
-                                alt="Commenter avatar"
-                                className="w-10 h-10 rounded-full"
-                            />
-                            <div>
-                                <p className="font-semibold text-gray-700 dark:text-gray-300">{comment.username}</p>
-                                <p className="text-gray-600 dark:text-gray-400">
-                                    {comment.content}
-                                </p>
-                                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{formatDate(comment.time)}</p>
+            <div className="flex-col contents">
+                <img
+                    src={post.image}
+                    alt="Blog cover"
+                    className="max-w-full h-auto object-cover rounded-lg mb-6"
+                />
+                <div className="prose dark:prose-invert max-w-none mb-8">
+                    <div dangerouslySetInnerHTML={{__html: post.content}}/>
+                </div>
+                <div>
+                    <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Comments</h2>
+                    {post.commentsDTO?.map((comment) =>
+                        <div key={comment.id} className="space-y-4 mt-3">
+                            <div className="flex space-x-4">
+                                <img
+                                    src={comment.userAvatar}
+                                    alt="Commenter avatar"
+                                    className="w-10 h-10 rounded-full"
+                                />
+                                <div>
+                                    <p className="font-semibold text-gray-700 dark:text-gray-300">{comment.username}</p>
+                                    <p className="text-gray-600 dark:text-gray-400">
+                                        {comment.content}
+                                    </p>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{formatDate(comment.time)}</p>
+                                </div>
                             </div>
+                            <div className="my-4 border-b border-gray-200 dark:border-gray-700"></div>
                         </div>
-                        <div className="my-4 border-b border-gray-200 dark:border-gray-700"></div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
             <form onSubmit={handleSubmit} className="w-full bg-white rounded-lg border p-2 mx-auto mt-20">
                 <div className="px-3 mb-2 mt-2">
@@ -224,7 +245,7 @@ const BlogPost = () => {
                 </div>
                 <div className="w-full flex justify-end px-4">
                     <input type="submit" className="px-2.5 py-1.5 rounded-md text-white text-sm bg-indigo-500"
-                           value="Comment" />
+                           value="Comment"/>
                 </div>
             </form>
         </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Post() {
     let [largestPosition, setLargestPosition] = useState(150);
@@ -18,7 +18,7 @@ function Post() {
             }
         };
         try {
-            const response = await axios.get(`http://localhost:8080/api/posts/public?page=${currentPage}&size=${pageSize}`,config);
+            const response = await axios.get(`http://localhost:8080/api/posts/public?page=${currentPage}&size=${pageSize}`, config);
             const data = response.data;
             setPosts(prev => [...prev, ...data]);
             setHasMore(data.length === size);
@@ -26,24 +26,33 @@ function Post() {
             console.error("Error loading posts:", error);
         }
     };
+
+    const truncateText = (text, maxLength) => {
+        if (text.length <= maxLength) {
+            return text;
+        }
+        return text.substring(0, maxLength) + '...';
+    };
+
     useEffect(() => {
         handleScroll();
     }, []);
-    const handleScroll =  () => {
-        window.addEventListener('scroll', function() {
+
+    const handleScroll = () => {
+        window.addEventListener('scroll', function () {
             var scrollPosition = window.pageYOffset;
             if (scrollPosition >= largestPosition) {
                 console.log(scrollPosition)
-                setTimeout(()=>{
+                setTimeout(() => {
                     setCurrentPage(prevPage => prevPage + 1)
-                },1000)
+                }, 1000)
                 largestPosition += 200;
                 setLargestPosition(largestPosition);
-
             }
         });
     };
-    const handleLike = async (postId) =>{
+
+    const handleLike = async (postId) => {
         const newSize = (currentPage + 1) * pageSize
         const token = localStorage.getItem('token');
         const config = {
@@ -52,14 +61,15 @@ function Post() {
             }
         };
         try {
-            const response = await axios.post(`http://localhost:8080/api/react/like?postId=${postId}&size=${newSize}`,null,config);
+            const response = await axios.post(`http://localhost:8080/api/react/like?postId=${postId}&size=${newSize}`, null, config);
             const data = response.data;
             setPosts(data)
         } catch (error) {
             console.error("Error loading posts:", error);
         }
     }
-    const handleUnlike = async (postId) =>{
+
+    const handleUnlike = async (postId) => {
         const newSize = (currentPage + 1) * pageSize
         const token = localStorage.getItem('token');
         const config = {
@@ -68,7 +78,7 @@ function Post() {
             }
         };
         try {
-            const response = await axios.delete(`http://localhost:8080/api/react/like?postId=${postId}&size=${newSize}`,config);
+            const response = await axios.delete(`http://localhost:8080/api/react/like?postId=${postId}&size=${newSize}`, config);
             const data = response.data
             setPosts(prevState => data)
         } catch (error) {
@@ -76,11 +86,11 @@ function Post() {
         }
     }
 
-
     const formatDate = (dateString) => {
         const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
         return new Date(dateString).toLocaleDateString('en-GB', options);
     };
+
     const handleSearch = async (event) => {
         if (event) event.preventDefault();
 
@@ -94,13 +104,11 @@ function Post() {
         try {
             const response = await axios.get(`http://localhost:8080/api/posts/search?input=${searchTerm}`);
             setPosts(response.data)
-
             setHasMore(false)
         } catch (error) {
             console.log('Error fetching search results:', error);
         }
     };
-
 
     useEffect(() => {
         if (searchTerm === '') {
@@ -110,13 +118,15 @@ function Post() {
         }
         handleSearch();
     }, [searchTerm]);
+
     useEffect(() => {
-            loadPosts(currentPage, pageSize);
+        loadPosts(currentPage, pageSize);
     }, [currentPage]);
+
     console.log(posts)
     return (
         <div className="space-y-6 space-x-0">
-            <form className="max-w-xl ml-180" onSubmit={handleSearch}>
+            <form className="max-w-l ml-180" onSubmit={handleSearch}>
                 <div className="relative">
                     <button type="submit" className="absolute left-0 top-1/2 -translate-y-1/2">
                         <svg
@@ -142,7 +152,7 @@ function Post() {
                         </svg>
                     </button>
                     <input
-                        style={{border: 0}}
+                        style={{ border: 0 }}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         type="text"
                         placeholder="Type to search..."
@@ -154,66 +164,67 @@ function Post() {
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {posts.map(post => (
                         <div key={post.id}
-                             className="flex flex-col bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+                             className="flex flex-col bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 relative">
                             <img
                                 className="object-cover w-full h-48 rounded-t-lg md:h-56"
                                 src={post.image}
                                 alt=""
                             />
                             <div className="flex flex-col justify-between p-4 leading-normal">
-                                <a href={`/posts/${post.id}`} className="hover:underline">
+                                <a href={`/posts/${post.id}`} className="hover:underline min-h-30 max-3xl">
                                     <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                                        {post.title}
+                                        {truncateText(post.title, 50)}
                                     </h5>
                                 </a>
-                                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                                    {post.description}
+                                <p className="min-h-10 max-h-10 mb-3 font-normal text-gray-700 dark:text-gray-400">
+                                    {truncateText(post.description, 90)}
                                 </p>
-                                <div className="post-detail-main-content mb-3"
-                                     dangerouslySetInnerHTML={{__html: post.content}}></div>
-                                <div className="flex items-center mb-3">
-                                    <img
-                                        className="object-cover w-8 h-8 rounded-full"
-                                        src={post.userAvatar}
-                                        alt=""
-                                    />
-                                    <span className="ml-3 text-md text-gray-600 dark:text-gray-400">{post.username}</span>
-                                    {post.isReacted ? (
-                                        <div onClick={() => handleUnlike(post.id)}
-                                             className="ml-3 flex items-center cursor-pointer">
-                                            <svg className="h-6 w-6 text-blue-500" width="24" height="24"
-                                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                                 stroke-linecap="round" stroke-linejoin="round">
-                                                <path stroke="none" d="M0 0h24v24H0z"/>
-                                                <path
-                                                    d="M7 11v8a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-7a1 1 0 0 1 1 -1h3a4 4 0 0 0 4 -4v-1a2 2 0 0 1 4 0v5h3a2 2 0 0 1 2 2l-1 5a2 3 0 0 1 -2 2h-7a3 3 0 0 1 -3 -3"/>
-                                            </svg>
-                                            <span className="ml-1">{post.reactQuantity}</span>
-                                        </div>
-                                    ) : (
-                                        <div onClick={() => handleLike(post.id)}
-                                             className="ml-3 flex items-center cursor-pointer">
-                                            <svg className="h-6 w-6 text-gray-500" width="24" height="24"
-                                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                                 stroke-linecap="round" stroke-linejoin="round">
-                                                <path stroke="none" d="M0 0h24v24H0z"/>
-                                                <path
-                                                    d="M7 11v8a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-7a1 1 0 0 1 1 -1h3a4 4 0 0 0 4 -4v-1a2 2 0 0 1 4 0v5h3a2 2 0 0 1 2 2l-1 5a2 3 0 0 1 -2 2h-7a3 3 0 0 1 -3 -3"/>
-                                            </svg>
-                                            <span className="ml-1">{post.reactQuantity}</span>
-                                        </div>
-                                    )}
-                                </div>
-                                <div
-                                    className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
-                                    <span>{formatDate(post.time)}</span>
+                                <div className="min-h-30 max-h-50 post-detail-main-content mb-3"
+                                     dangerouslySetInnerHTML={{ __html: truncateText(post.content, 100) }}></div>
+                                <div className="absolute bottom-0 w-full p-4 flex items-center justify-between">
                                     <div className="flex items-center">
-                                        <svg className="w-5 h-5 mr-1 text-gray-700 dark:text-gray-300"
-                                             viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M3,6v9c0,1.105,0.895,2,2,2h9v5l5.325-3.804C20.376,17.446,21,16.233,21,14.942V6c0-1.105-0.895-2-2-2H5C3.895,4,3,4.895,3,6z"/>
-                                        </svg>
-                                        <span>{post.commentsDTO.length}</span>
+                                        <img
+                                            className="object-cover w-8 h-8 rounded-full"
+                                            src={post.userAvatar}
+                                            alt=""
+                                        />
+                                        <span className="ml-3 text-md text-gray-600 dark:text-gray-400">{post.username}</span>
+                                        {post.isReacted ? (
+                                            <div onClick={() => handleUnlike(post.id)}
+                                                 className="ml-3 flex items-center cursor-pointer">
+                                                <svg className="h-6 w-6 text-blue-500" width="24" height="24"
+                                                     viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none"
+                                                     strokeLinecap="round" strokeLinejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" />
+                                                    <path
+                                                        d="M7 11v8a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-7a1 1 0 0 1 1 -1h3a4 4 0 0 0 4 -4v-1a2 2 0 0 1 4 0v5h3a2 2 0 0 1 2 2l-1 5a2 3 0 0 1 -2 2h-7a3 3 0 0 1 -3 -3" />
+                                                </svg>
+                                                <span className="ml-1">{post.reactQuantity}</span>
+                                            </div>
+                                        ) : (
+                                            <div onClick={() => handleLike(post.id)}
+                                                 className="ml-3 flex items-center cursor-pointer">
+                                                <svg className="h-6 w-6 text-gray-500" width="24" height="24"
+                                                     viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none"
+                                                     strokeLinecap="round" strokeLinejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" />
+                                                    <path
+                                                        d="M7 11v8a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-7a1 1 0 0 1 1 -1h3a4 4 0 0 0 4 -4v-1a2 2 0 0 1 4 0v5h3a2 2 0 0 1 2 2l-1 5a2 3 0 0 1 -2 2h-7a3 3 0 0 1 -3 -3" />
+                                                </svg>
+                                                <span className="ml-1">{post.reactQuantity}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                                        <span>{formatDate(post.time)}</span>
+                                        <div className="flex items-center ml-3">
+                                            <svg className="w-5 h-5 mr-1 text-gray-700 dark:text-gray-300"
+                                                 viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M3,6v9c0,1.105,0.895,2,2,2h9v5l5.325-3.804C20.376,17.446,21,16.233,21,14.942V6c0-1.105-0.895-2-2-2H5C3.895,4,3,4.895,3,6z" />
+                                            </svg>
+                                            <span>{post.commentsDTO.length}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -223,7 +234,7 @@ function Post() {
             </div>
             {hasMore && (
                 <button className="ml-100"
-                    id="load-more" onClick={() => setCurrentPage(prevPage => prevPage + 1)}>Load More</button>
+                        id="load-more" onClick={() => setCurrentPage(prevPage => prevPage + 1)}>Load More</button>
             )}
         </div>
     );
